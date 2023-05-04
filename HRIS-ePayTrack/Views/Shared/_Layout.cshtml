@@ -1,0 +1,289 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRIS - ePayTrack</title>
+
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+    <link href="~/Content/font-awesome/css/font-awesome.css" rel="stylesheet" />
+
+    <!-- Data picker -->
+    <link href="~/Content/plugins/datapicker/datepicker3.css" rel="stylesheet">
+
+    <link href="~/Content/plugins/dataTables/datatables.min.css" rel="stylesheet" />
+
+    <link href="~/Content/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="~/Content/common.css" rel="stylesheet" />
+    <!-- Toastr style -->
+    <link href="~/Content/plugins/toastr/toastr.min.css" rel="stylesheet">
+
+    <!-- Gritter -->
+    <link href="~/Content/plugins/gritter/jquery.gritter.css" rel="stylesheet">
+    <link href="~/Content/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+
+    <link href="~/Content/animate.css" rel="stylesheet">
+    <link href="~/Content/style.css" rel="stylesheet">
+    @*<link href="~/Content/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css" rel="stylesheet" />*@
+    <script src="~/Scripts/ngSweetAlert.js"></script>
+
+    <script src="~/Angular/angular.min.js"></script>
+    <script src="~/Angular/ngApp.js"></script>
+    <script src="~/Angular/ng-SharedLayout.js"></script>
+
+    <style>
+        .row-height {
+            height: 40px !important;
+        }
+
+        .imgProfile {
+            border-radius: 50%;
+        }
+    </style>
+
+    <script language="javascript" type="text/javascript">
+    var sessionTimeoutWarning   = @System.Configuration.ConfigurationManager.AppSettings["SessionWarning"].ToString(); //get session warning value from web config variable
+    var sessionTimeout          = @Session.Timeout; //get session timeout value from web config variable
+    var sTimeout                = sessionTimeoutWarning * 60000; //time to pop-up warning message
+    var set_time_var            = "";
+    var count                   = sessionTimeout * 60;
+    var counter                 = "";
+
+    //detect mouse click then call reset session time function
+    function mouse_detect(event) {
+        reset_session();
+    }
+
+    //detect mouse scroll then call reset session time function
+    function wheel_detect() {
+        reset_session();
+    }
+
+    //start session timer on page load
+    function onload_body() {
+        set_time();
+        timer();
+    }
+
+    function set_time() {
+        set_time_var = setTimeout('session_warning();', sTimeout);
+        counter = setInterval(timer, 1000);
+    }
+
+    function timer() {
+        count = count - 1;
+        if (count <= 0) {
+            setTimeout(function () {
+                swal({
+                    title: "Session Timeout",
+                    text: "You will be redirected to Login Page.",
+                    icon: "error",
+                    allowOutsideClick: false,
+                })
+                    .then(function () {
+                        clearInterval(counter);
+                        sessionStorage.clear();
+                        location.href = "../Login/Index"
+                        return;
+                    });
+            }, 1000);
+        }
+        $('#time_left').text(count);
+    }
+
+    function session_warning() {
+        setTimeout(function () {
+            toastr.options = {
+                closeOnHover: true,
+                closeButton: false,
+                progressBar: true,
+                showMethod: 'slideDown',
+                timeOut: 30000
+            };
+            toastr.error('Your session is about to end in ' + sessionTimeoutWarning + ' minutes, try refreshing the page!', 'You have been idle for too long.');
+
+        }, 1000);
+    }
+
+    function reset_session() {
+        toastr.clear();
+        var xmlHttp = null;
+        xmlHttp = new XMLHttpRequest();
+        xmlHttp.open("GET", "KeepAlive.aspx", true);
+        xmlHttp.send(null);
+
+        count = sessionTimeout * 60;
+        toast_time_out = 1;
+        clearTimeout(set_time_var);
+        clearInterval(counter);
+        set_time();
+    }
+    </script>
+</head>
+<body class="top-navigation white-bg  with-background" ng-app="ng_ePayTrack_App" ng-controller="SharedLayoutCtrlr" id="main_body" onload="onload_body()" onmousedown="mouse_detect(event)" onwheel="wheel_detect()">
+    <div id="" class="white-bg">
+
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top" role="navigation">
+                <div class="navbar-header">
+                    <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
+                        <i class="fa fa-reorder"></i>
+                    </button>
+
+                    <a href="#" class="navbar-brand font-bold">
+                        <span class="text-white" style="margin-top:10px;margin-bottom:10px ">
+                            <img class="image-circle" width="30" height="30" src="~/ResourcesImages/com_logo.png" />
+                            DOCUMENT TRACKING
+                        </span>
+                               
+                        @*<div class="row">
+                            <div class="col-lg-2">
+                            </div>
+                            <div class="col-lg-10">
+                            </div>
+                        </div>*@
+
+
+                    </a>
+
+                    
+
+                    @*<div class="row text-white">
+                        {{employee_name}}
+                    </div>*@
+
+                </div>
+                <div class="navbar-collapse collapse" id="navbar">
+                    <ul class="nav navbar-top-links navbar-left">
+                        <li >
+                            @*<span class="text-white"></span>*@
+                            <a class="text-white">
+                                <i class="fa fa-user "></i> Welcome, {{employee_name}}
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-top-links navbar-right">
+                        <li>
+                            <a ng-click="logout()">
+                                <i class="fa fa-sign-out"></i> Log out
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        @*<li class="active">
+                <a aria-expanded="false" role="button" href="/cMainPage/Index"> Back to main page</a>
+            </li>*@
+                        <li class="dropdown">
+                            <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> Settings <span class="caret"></span></a>
+                            <ul role="menu" class="dropdown-menu">
+                                <li><a ng-click="btn_open_docType_modal()">Document Type</a></li>
+                                <li><a href="#">Document Route Control</a></li>
+                            </ul>
+                        </li>
+                        @*<li class="dropdown">
+                <a aria-expanded="false" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> Reports <span class="caret"></span></a>
+                <ul role="menu" class="dropdown-menu">
+                    <li><a href="#">Released Document History</a></li>
+                    <li><a href="#">Received Document History</a></li>
+                    <li><a href="#">History Document History</a></li>
+                </ul>
+            </li>*@
+                    </ul>
+
+                </div>
+            </nav>
+        </div>
+
+        @RenderBody()
+    </div>
+
+
+
+    <!-- Mainly scripts -->
+    <script src="~/Scripts/jquery-2.1.1.js"></script>
+
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="~/Scripts/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <script src="~/Scripts/plugins/dataTables/datatables.min.js"></script>
+
+    <!-- Flot -->
+    <script src="~/Scripts/plugins/flot/jquery.flot.js"></script>
+    <script src="~/Scripts/plugins/flot/jquery.flot.tooltip.min.js"></script>
+    <script src="~/Scripts/plugins/flot/jquery.flot.spline.js"></script>
+    <script src="~/Scripts/plugins/flot/jquery.flot.resize.js"></script>
+    <script src="~/Scripts/plugins/flot/jquery.flot.pie.js"></script>
+
+
+    <!-- Peity -->
+    <script src="~/Scripts/plugins/peity/jquery.peity.min.js"></script>
+    <script src="~/Scripts/demo/peity-demo.js"></script>
+
+    <!-- Custom and plugin javascript -->
+
+    <script src="~/Scripts/plugins/pace/pace.min.js"></script>
+
+    <!-- jQuery UI -->
+    <script src="~/Scripts/plugins/jquery-ui/jquery-ui.min.js"></script>
+
+    <!-- GITTER -->
+    <script src="~/Scripts/plugins/gritter/jquery.gritter.min.js"></script>
+
+    <!-- Sparkline -->
+    <script src="~/Scripts/plugins/sparkline/jquery.sparkline.min.js"></script>
+
+    <!-- Sparkline demo data  -->
+    <script src="~/Scripts/demo/sparkline-demo.js"></script>
+
+    <!-- ChartJS-->
+    <script src="~/Scripts/plugins/chartJs/Chart.min.js"></script>
+
+    <!-- Toastr -->
+    <script src="~/Scripts/plugins/toastr/toastr.min.js"></script>
+
+    <script src="~/Scripts/inspinia.js"></script>
+
+    <!-- iCheck -->
+    <script src="~/Scripts/plugins/iCheck/icheck.min.js"></script>
+
+    <!-- Data picker -->
+    <script src="~/Scripts/plugins/datapicker/bootstrap-datepicker.js"></script>
+    <!-- Date range picker -->
+    <script src="~/Scripts/plugins/daterangepicker/daterangepicker.js"></script>
+    <script src="~/Scripts/moment.js"></script>
+    <script src="~/Scripts/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
+    <script>
+
+        $(document).ready(function () {
+          
+            $('a[data-toggle="tab"]').on( 'shown.bs.tab', function (e) {
+                $($.fn.dataTable.tables( true ) ).css('width', '100%');
+                $($.fn.dataTable.tables( true ) ).DataTable().columns.adjust().draw();
+            });
+         
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+
+            $('#datetimepicker1').datetimepicker({
+                maxDate: moment(),
+                format: 'YYYY-MM-DD hh:mm:ss A',
+            });
+            $('#datetimepicker2').datetimepicker({
+                maxDate: moment(),
+                format: 'YYYY-MM-DD hh:mm:ss A',
+            });
+
+
+
+        });
+    </script>
+
+
+</body>
+
+</html>
