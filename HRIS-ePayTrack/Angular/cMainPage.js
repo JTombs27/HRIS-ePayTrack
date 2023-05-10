@@ -221,40 +221,20 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
         if (s.elEmpty(s.doc_ctrl_nbr))
         {
             s.required("doc_ctrl_nbr");
-           //s.notrequired("itcd_control_nbr");
             s.notrequired("remarks");
             s.notrequired("doc_nbr");
             s.notrequired("doc_fund_subcode");
             s.notrequired("dd_ToRelease_route");
             s.notrequired("dd_ToReturn_route");
-            s.doc_nbr_show     = false
-            s.doc_funcode_show = false
-            s.show_release_btn = false
-            s.show_return_btn  = false
-            s.allow_release    = false
-            s.allow_receive    = false
-            s.allow_return     = false
-           return flag = 1
+            s.doc_nbr_show     = false;
+            s.doc_funcode_show = false;
+            s.show_release_btn = false;
+            s.show_return_btn  = false;
+            s.allow_release    = false;
+            s.allow_receive    = false;
+            s.allow_return      = false;
+            return flag = 1;
         }
-        //s.it_ctrl_nbr_found
-      
-        //if ((s.elEmpty(s.di.it_control_nbr) || s.it_ctrl_nbr_found == false) && s.ds.department_code == "03" && s.route_sequence < 2) {
-        //    if (s.elEmpty(s.di.it_control_nbr))
-        //    {
-        //        $("small.warningInfo").html('<i class="fa fa-info-circle"></i>Required Field!')
-        //    }
-        //    else
-        //    {
-        //        if (s.it_ctrl_nbr_found == false) {
-        //            $("small.warningInfo").html('<i class="fa fa-info-circle"></i>' + s.warningInfoText)
-        //        }
-        //    }
-        //    s.required("itcd_control_nbr");
-        //    flag = 1
-        //}
-        //else {
-        //    s.notrequired("itcd_control_nbr");
-        //}
         if(s.elEmpty(s.di.remarks))
         {
             s.required("remarks");
@@ -264,14 +244,12 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
             s.notrequired("remarks");
         }
 
-        if (s.doc_nbr_show == true) {
+        if (s.doc_nbr_show == true)
+        {
          
             if (s.elEmpty(s.di.doc_nbr))
             {
-                //s.required("doc_nbr");
-                s.notrequired("doc_nbr")
-                //flag = 1
-               
+                s.notrequired("doc_nbr");
             }
             else {
                 s.notrequired("doc_nbr");
@@ -282,8 +260,6 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
           
             if (s.elEmpty(s.di.doc_fund_subcode)) {
                 s.notrequired("doc_fund_subcode");
-                //s.required("doc_fund_subcode");
-                //flag = 1
             }
             else
             {
@@ -293,7 +269,7 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
         if (s.show_release_btn == true && s.show_return_btn == false) {
             if (s.elEmpty(s.di.dd_ToRelease_route)) {
                 s.required("dd_ToRelease_route");
-                flag = 1
+                flag = 1;
             }
             else {
                 s.notrequired("dd_ToRelease_route");
@@ -849,8 +825,8 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
                 paytrk_authority(s.paytrk_auth)
 
                 //UPDATED BY JOSEPH....
-                //s.ToRecieve_Data = d.data.ToReceive.refreshTable('ToRecieve_Table', '');
-                //s.ToRelease_Data = d.data.ToRelease.refreshTable('ToRelease_Table', '');
+                s.ToRecieve_Data = d.data.ToReceive.refreshTable('ToRecieve_Table', '');
+                s.ToRelease_Data = d.data.ToRelease.refreshTable('ToRelease_Table', '');
 
               
                 //s.ToRecieve_Table.columns.adjust().draw();
@@ -994,8 +970,12 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
 
     s.scan_doc_ctrl_nbr = function (val) {
         var doc_len = 0
-        
-        if (val.charAt(4) == "-") {
+        if (val.substring(0,2) == "LV")
+        {
+            doc_len = 15;
+        }
+        else if (val.charAt(4) == "-")
+        {
             doc_len = 12
         }
         else {
@@ -1329,11 +1309,11 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
             s.change_date = true;
         }
 
-        h.post("../cMainPage/sp_document_tracking_nbrs_tbl_update", { det: s.data_vl[0], dt: dt }).then(function (d) {
+        h.post("../cMainPage/sp_document_tracking_nbrs_tbl_update", { det: s.data_vl, dt: dt }).then(function (d) {
             if (d.data.message == "success")
             {
                 h.post("../cMainPage/SaveRoute", {
-                    det: s.data_vl[0],
+                    det: s.data_vl,
                     dt: dt,
                     change_date: s.change_date,
 
@@ -1342,7 +1322,7 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
                     if (d.data.message == "success")
                     {
                         if (s.ds.department_code == "03") {
-                            h.post("../cMainPage/UpdateDocLink", { it_control_nbr: s.di.it_control_nbr, doc_ctrl_nbr: s.data_vl[0].doc_ctrl_nbr }).then(function (f) {
+                            h.post("../cMainPage/UpdateDocLink", { it_control_nbr: s.di.it_control_nbr, doc_ctrl_nbr: s.data_vl.doc_ctrl_nbr }).then(function (f) {
                                 s.document_tracking_link_tbl = d.data.nlink;
                                 swal(d.data.swl, { icon: "success", });
                                 //ClearDocInfoFields2();
@@ -1548,22 +1528,15 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
     
 
     ////for btn_release ng-click 
-    s.ReleaseRoute = function (D) {
-
-       
+    s.ReleaseRoute = function (D)
+    {
         console.log(D);
-        if (CheckedRequiredFields() == 1) {
-            $("#requirefields").removeClass('hidden')
-            return
+        if (CheckedRequiredFields() == 1)
+        {
+            $("#requirefields").removeClass('hidden');
+            return;
         }
 
-       
-       
-        //if (s.ds.department_code == "03" && s.route_sequence < 2) {
-        //    if (s.it_ctrl_nbr_found == false) {
-        //        return
-        //    }
-        //}
         if (s.exec_block == true)
         {
             cs.required3("doc_nbr", "Number already used!")
@@ -1594,8 +1567,8 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
 
         if(s.var_data_mode == "CR")
         {
-            var dt = s.ToCorrect_Data.select("doc_ctrl_nbr", s.doc_ctrl_nbr)
-            var route_seq = dt[0].route_seq
+            var dt = s.ToCorrect_Data.select("doc_ctrl_nbr", s.doc_ctrl_nbr);
+            var route_seq = dt[0].route_seq;
             h.post("../cMainPage/CorrectReleasedRoute",
                 {
                           doc_ctrl_nbr : s.doc_ctrl_nbr
@@ -1624,7 +1597,7 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
         else
         {
             var date_dttm = $("#datetimepicker1").data("DateTimePicker").date()
-            var route = s.data_vl[0].route_ctrl_nbr
+            var route = s.data_vl.route_ctrl_nbr
             s.a_flag = 'L'
             var dt = {
 
@@ -1653,7 +1626,7 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
         }
         s.a_flag = 'T'
         var date_dttm = $("#datetimepicker1").data("DateTimePicker").date()
-        var route = s.data_vl[0].route_ctrl_nbr
+        var route = s.data_vl.route_ctrl_nbr
         
         if (s.exec_block == true) {
             swal("Number already used!", { icon: "warning", })
@@ -1737,7 +1710,7 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
                 cs.required3("dd_ToRelease_route", "Required Field")
             }
            
-            Required_Fields(s.data_vl[0])
+            Required_Fields(s.data_vl)
             cs.notrequired3("dd_ToReturn_route")
         }
 
@@ -2573,6 +2546,8 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
     //***View-Document-on-Modal*****VJA***//
     //***********************************// 
     s.btn_view_docs = function () {
+        s.allow_receive = false;
+        s.allow_cafoa = false;
         cs.spinnerAdd("scndocctrlnbr", "fa-qrcode")
         $("#doc_fund_subcode").css({
             "border": "",
@@ -2723,27 +2698,91 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
             }).then(function (d) {
                 var doctype = d.data.doctype.docmnt_type;
                 //alert(d.data.doctype)
-                if (d.data.message = "success") {
-                    var controller = "Reports"
-                    var action = "Index"
-                    var ReportName = "CrystalReport"
-                    var SaveName = "Crystal_Report"
-                    var ReportType = "inline"
-
-                    var ReportPath = "~/Reports/"
-                    var sp = ""
-                    var parameters = ""
-
+                if (d.data.message = "success")
+                {
+                    var ReportName  = "CrystalReport";
+                    var SaveName    = "Crystal_Report";
+                    var ReportType  = "inline";
+                    var sp          = "";
+                    var parameters  = "";
+                    var docmnt_type = doctype;
                     sp = "sp_edocument_trk_tbl_history";
-                    parameters = "p_doc_ctrl_nbr," + s.doc_ctrl_nbr_print_history + ",p_docmnt_type," + doctype
-                    ReportPath = ReportPath + "cryDocTracking/cryDocsHistory.rpt"
+                    parameters = "p_doc_ctrl_nbr," + s.doc_ctrl_nbr_print_history + ",p_docmnt_type," + docmnt_type;
+                    ReportPath = "~/Reports/cryDocTracking/cryDocsHistory.rpt";
+                    sp = "sp_edocument_trk_tbl_history," + parameters;
 
 
-                    location.href = "../" + controller + "/" + action + "?ReportName=" + ReportName
+                    var iframe = document.getElementById('iframe_print_preview');
+                    var iframe_page = $("#iframe_print_preview")[0];
+
+                    iframe.style.visibility = "hidden";
+
+                    s.embed_link = "../Reports/CrystalViewer.aspx?Params=" + ""
+                        + "&ReportName=" + ReportName
                         + "&SaveName=" + SaveName
                         + "&ReportType=" + ReportType
                         + "&ReportPath=" + ReportPath
-                        + "&Sp=" + sp + "," + parameters
+                        + "&id=" + sp;
+
+                    if (!/*@cc_on!@*/0) {
+                        iframe.onload = function () {
+                            iframe.style.visibility = "visible";
+                            $("#modal_generating_remittance").modal("hide")
+
+                        };
+                    }
+                    else if (iframe_page.innerHTML()) {
+                        // get and check the Title (and H tags if you want)
+                        var ifTitle = iframe_page.contentDocument.title;
+                        if (ifTitle.indexOf("404") >= 0) {
+                            swal("You cannot Preview this Report", "There something wrong!", { icon: "warning" });
+                            iframe.src = "";
+
+                            s.loading_r = false;
+                        }
+                        else if (ifTitle != "") {
+                            swal("You cannot Preview this Report", "There something wrong!", { icon: "warning" });
+                            iframe.src = "";
+
+                            s.loading_r = false;
+                            $('#print_preview_modal').modal("hide");
+                        }
+                    }
+                    else {
+                        iframe.onreadystatechange = function () {
+                            if (iframe.readyState == "complete") {
+                                iframe.style.visibility = "visible";
+
+                            }
+                        };
+                    }
+
+                    s.loading_r = false;
+
+                    iframe.src = s.embed_link;
+
+                    $("#print_preview_modal").modal({ keyboard: false, backdrop: "static" });
+
+                    //var controller = "Reports"
+                    //var action = "Index"
+                    //var ReportName = "CrystalReport"
+                    //var SaveName = "Crystal_Report"
+                    //var ReportType = "inline"
+
+                    //var ReportPath = "~/Reports/"
+                    //var sp = ""
+                    //var parameters = ""
+
+                    //sp = "sp_edocument_trk_tbl_history";
+                    //parameters = "p_doc_ctrl_nbr," + s.doc_ctrl_nbr_print_history + ",p_docmnt_type," + doctype
+                    //ReportPath = ReportPath + "cryDocTracking/cryDocsHistory.rpt"
+
+
+                    //location.href = "../" + controller + "/" + action + "?ReportName=" + ReportName
+                    //    + "&SaveName=" + SaveName
+                    //    + "&ReportType=" + ReportType
+                    //    + "&ReportPath=" + ReportPath
+                    //    + "&Sp=" + sp + "," + parameters
                 } else {
                     swal("No Data Found !", "", "warning")
                 }
@@ -3343,40 +3382,106 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
 
     s.btn_print_history_grid = function (lst, table_data)
     {
-        h.post("../cMainPage/RetrieveDocHistory", {
+        var controller  = "Reports";
+        var action      = "Index";
+        var ReportName  = "CrystalReport";
+        var SaveName    = "Crystal_Report";
+        var ReportType  = "inline";
+        var sp          = "";
+        var parameters  = "";
+        var docmnt_type = s[table_data][lst].docmnt_type_source.toString().split('-')[0];
+        sp          = "sp_edocument_trk_tbl_history";
+        parameters  = "p_doc_ctrl_nbr," + s[table_data][lst].doc_ctrl_nbr + ",p_docmnt_type," + docmnt_type;
+        ReportPath  = "~/Reports/cryDocTracking/cryDocsHistory.rpt";
+        sp          = "sp_edocument_trk_tbl_history," + parameters;
 
-            par_doc_ctrl_nbr:s[table_data][lst].doc_ctrl_nbr
-        }).then(function (d) {
+        
+        var iframe = document.getElementById('iframe_print_preview');
+        var iframe_page = $("#iframe_print_preview")[0];
 
-            if (d.data.message == "success")
-            {
-                var controller = "Reports"
-                var action = "Index"
-                var ReportName = "CrystalReport"
-                var SaveName = "Crystal_Report"
-                var ReportType = "inline"
+        iframe.style.visibility = "hidden";
 
-                var ReportPath = "~/Reports/"
-                var sp = ""
-                var parameters = ""
-               
-                var docmnt_type = s[table_data][lst].docmnt_type_source.toString().split('-')[0]
-               
-                sp = "sp_edocument_trk_tbl_history";
-                parameters = "p_doc_ctrl_nbr," + s[table_data][lst].doc_ctrl_nbr + ",p_docmnt_type," + docmnt_type
-                ReportPath = ReportPath + "cryDocTracking/cryDocsHistory.rpt"
+        s.embed_link = "../Reports/CrystalViewer.aspx?Params=" + ""
+            + "&ReportName=" + ReportName
+            + "&SaveName=" + SaveName
+            + "&ReportType=" + ReportType
+            + "&ReportPath=" + ReportPath
+            + "&id=" + sp;
 
+        if (!/*@cc_on!@*/0)
+        { 
+            iframe.onload = function () {
+                iframe.style.visibility = "visible";
+                $("#modal_generating_remittance").modal("hide")
 
-                location.href = "../" + controller + "/" + action + "?ReportName=" + ReportName
-                    + "&SaveName=" + SaveName
-                    + "&ReportType=" + ReportType
-                    + "&ReportPath=" + ReportPath
-                    + "&Sp=" + sp + "," + parameters
-            } else {
-                swal("No Data Found !", "", "warning")
+            };
+        }
+        else if (iframe_page.innerHTML()) {
+            // get and check the Title (and H tags if you want)
+            var ifTitle = iframe_page.contentDocument.title;
+            if (ifTitle.indexOf("404") >= 0) {
+                swal("You cannot Preview this Report", "There something wrong!", { icon: "warning" });
+                iframe.src = "";
+
+                s.loading_r = false;
             }
+            else if (ifTitle != "") {
+                swal("You cannot Preview this Report", "There something wrong!", { icon: "warning" });
+                iframe.src = "";
 
-        })
+                s.loading_r = false;
+                $('#print_preview_modal').modal("hide");
+            }
+        }
+        else {
+            iframe.onreadystatechange = function () {
+                if (iframe.readyState == "complete") {
+                    iframe.style.visibility = "visible";
+
+                }
+            };
+        }
+
+        s.loading_r = false;
+
+        iframe.src = s.embed_link;
+
+        $("#print_preview_modal").modal({ keyboard: false, backdrop: "static" });
+
+        //h.post("../cMainPage/RetrieveDocHistory", {
+
+        //    par_doc_ctrl_nbr:s[table_data][lst].doc_ctrl_nbr
+        //}).then(function (d) {
+
+        //    if (d.data.message == "success")
+        //    {
+        //        var controller = "Reports"
+        //        var action = "Index"
+        //        var ReportName = "CrystalReport"
+        //        var SaveName = "Crystal_Report"
+        //        var ReportType = "inline"
+
+        //        var ReportPath = "~/Reports/"
+        //        var sp = ""
+        //        var parameters = ""
+               
+        //        var docmnt_type = s[table_data][lst].docmnt_type_source.toString().split('-')[0]
+               
+        //        sp = "sp_edocument_trk_tbl_history";
+        //        parameters = "p_doc_ctrl_nbr," + s[table_data][lst].doc_ctrl_nbr + ",p_docmnt_type," + docmnt_type
+        //        ReportPath = ReportPath + "cryDocTracking/cryDocsHistory.rpt"
+
+
+        //        location.href = "../" + controller + "/" + action + "?ReportName=" + ReportName
+        //            + "&SaveName=" + SaveName
+        //            + "&ReportType=" + ReportType
+        //            + "&ReportPath=" + ReportPath
+        //            + "&Sp=" + sp + "," + parameters
+        //    } else {
+        //        swal("No Data Found !", "", "warning")
+        //    }
+
+        //})
 
     }
 
@@ -3688,14 +3793,14 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
         s.payroll_registry_nbr   = "";
         s.payroll_year           = "";
 
-        s.payroll_registry_descr = s.data_vl[0].payroll_registry_descr
-        s.payroll_registry_nbr   = s.data_vl[0].doc_ctrl_nbr
-        s.payroll_year           = s.data_vl[0].payroll_year
+        s.payroll_registry_descr = s.data_vl.payroll_registry_descr
+        s.payroll_registry_nbr   = s.data_vl.doc_ctrl_nbr
+        s.payroll_year           = s.data_vl.payroll_year
         h.post("../cMainPage/Retrieve_CAFOA",
             {
-                par_payroll_year          : s.data_vl[0].payroll_year
-                , par_payroll_registry_nbr: s.data_vl[0].doc_ctrl_nbr
-                , par_payrolltemplate_code: s.data_vl[0].payrolltemplate_code
+                par_payroll_year          : s.data_vl.payroll_year
+                , par_payroll_registry_nbr: s.data_vl.doc_ctrl_nbr
+                , par_payrolltemplate_code: s.data_vl.payrolltemplate_code
 
             }).then(function (d)
             {
@@ -4139,7 +4244,7 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
             h.post("../cMainPage/RetrieveReports", {
                 par_payroll_year                : s.payroll_year
                 , par_payroll_registry_nbr      : s.payroll_registry_nbr
-                , par_payrolltemplate_code      : s.data_vl[0].payrolltemplate_code
+                , par_payrolltemplate_code      : s.data_vl.payrolltemplate_code
 
             }).then(function (d) {
                 if (d.data.message = "success") {
@@ -4192,113 +4297,172 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
     //********************************************************//
     function FetchDataAgain()
     {
-        h.post("../cMainPage/FETCH_DATA", { doc_ctrl_nbr: s.doc_ctrl_nbr }).then(function (d) {
+        h.post("../cMainPage/FETCH_DATA", { doc_ctrl_nbr: s.doc_ctrl_nbr }).then(function (d)
+        {
             if (d.data.message == "success")
             {
-                s.ToRecieve_Data = d.data.ToReceive.refreshTable('ToRecieve_Table', '');
-                s.ToRelease_Data = d.data.ToRelease.refreshTable('ToRelease_Table', '');
+                var dtl = [];
+                var t   = "";
 
-                var dtl = []
-                var rec = s.ToRecieve_Data.filter(function (d) {
-                    return d.doc_ctrl_nbr == s.doc_ctrl_nbr
-                })
-
-                var rel = s.ToRelease_Data.filter(function (d) {
-                    return d.doc_ctrl_nbr == s.doc_ctrl_nbr
-                })
-
-                // console.log(s.ToRecieve_Data)
-                // console.log(s.ToRelease_Data)
-
-                if (rec.length > 0) {
-                    dtl = rec
-                }
-                else if (rel.length > 0) {
-                    dtl = rel
-                }
-                else if (rec.length <= 0 && rel.length <= 0) {
-                    docctrlnbrNotFound();
-                    loading("hide");
-                    return;
-                }
-                var t = dtl[0].document_status
-                
-
-                if (t == "V")
+                if (d.data.ToReceive != null) //Ang data naa sa to be received
                 {
-                    s.list_type = "V"
+                    t = "V";
+                    s.list_type = "V";
+                    s.route_sequence = d.data.ToReceive.route_seq;
+                    s.rel_rec_ret = "Receive";
+                    var docctrlnbr = d.data.ToReceive.doc_ctrl_nbr;
+                    dtl = d.data.ToReceive;
+                    h.post("../cMainPage/ReturnReleaseRouting", { docctrlnbr: docctrlnbr, par_action: t })
+                        .then(function (d) {
+                            s.temp_date_serv = d.data.dt_tm;
+                            s.change_date = false;
+                            s.doc_nbr_list = d.data.nbr_list;
+                            var paytrk_auth = d.data.paytrk_auth;
+                            paytrk_authority(paytrk_auth);
+                            s.action_status = "RV";
+                            s.di.payroll_registry_descr = dtl.payroll_registry_descr;
+                            $("#dttm").val(d.data.dt_tm);
+                            s.data_vl = dtl;
+                            Required_Fields(dtl);
+                            $("#barcode_notfound").addClass("hidden");
+                            s.allow_receive = true;
+                            s.Data_Mode(dtl, s.l_len, s.t_len, "V");
+                            loading("hide");
+                            s.di.remarks = dtl.doc_remarks;
+                            $("#remarks").val(dtl.doc_remarks);
+                        }
+                        );
 
-                    s.route_sequence = dtl[0].route_seq;
-
-                    s.rel_rec_ret = "Receive"
-
-                    var orig_route = dtl[0].route_ctrl_nbr
-                    var docctrlnbr = dtl[0].doc_ctrl_nbr
-                    h.post("../cMainPage/ReturnReleaseRouting", {docctrlnbr: docctrlnbr,par_action:t }).then(function (d) {
-                        s.temp_date_serv = d.data.dt_tm;
-                        s.change_date = false;
-                        s.doc_nbr_list = d.data.nbr_list
-                        var paytrk_auth = d.data.paytrk_auth
-                        paytrk_authority(paytrk_auth)
-                        s.action_status = "RV"
-                        s.di.payroll_registry_descr = dtl[0].payroll_registry_descr
-
-
-                        $("#dttm").val(d.data.dt_tm);
-                        s.data_vl = dtl
-                        Required_Fields(dtl[0])
-                        $("#barcode_notfound").addClass("hidden")
-                        s.allow_receive = true
-                        s.Data_Mode(dtl[0], s.l_len, s.t_len, "V")
-                        loading("hide")
-                        s.di.remarks = dtl[0].doc_remarks
-                        $("#remarks").val(dtl[0].doc_remarks)
-                    })
                 }
-                else if (t == "L" || t == "T") {
+                else if (d.data.ToRelease != null) //Ang data naa sa to be received
+                {
+                    dtl                 = d.data.ToRelease;
+                    s.route_sequence    = dtl.route_seq;
+                    s.list_type         = "L";
+                    s.rel_rec_ret       = "Release";
+                    s.allow_release     = true;
+                    s.allow_return      = false;
+                    var orig_route      = dtl.department_code;
+                    var docctrlnbr      = dtl.doc_ctrl_nbr;
+                    h.post("../cMainPage/ReturnReleaseRouting", { docctrlnbr: docctrlnbr, par_action: t })
+                        .then(function (d)
+                        {
+                            s.temp_date_serv    = d.data.dt_tm;
+                            s.change_date       = false;
+                            var paytrk_auth     = d.data.paytrk_auth;
+                            paytrk_authority(paytrk_auth);
+                            s.doc_nbr_list              = d.data.nbr_list;
+                            s.t_len                     = d.data.return_route.releaseReturnDropDown("T", "");
+                            s.l_len                     = d.data.release_route.releaseReturnDropDown("L", dtl.vlt_dept_code);
+                            s.action_status             = "RT";
+                            s.di.payroll_registry_descr = dtl.payroll_registry_descr;
+                            $("#dttm").val(d.data.dt_tm);
+                            s.data_vl = dtl;
+                            Required_Fields(dtl);
+                            $("#barcode_notfound").addClass("hidden");
+                            s.Data_Mode(dtl, s.l_len, s.t_len, "L");
+                            loading("hide");
+                            s.di.remarks = dtl.doc_remarks;
+                            $("#remarks").val(dtl.doc_remarks);
 
-
-                    s.route_sequence = dtl[0].route_seq;
-                    s.list_type = "L"
-                    s.rel_rec_ret = "Release"
-                    s.allow_release = true;
-                    s.allow_return = false;
-                    var orig_route = dtl[0].department_code
-                    var docctrlnbr = dtl[0].doc_ctrl_nbr
-                    h.post("../cMainPage/ReturnReleaseRouting", { docctrlnbr: docctrlnbr, par_action: t  }).then(function (d) {
-                        s.temp_date_serv = d.data.dt_tm;
-                        s.change_date = false;
-                        var paytrk_auth = d.data.paytrk_auth
-                        s.doc_nbr_list = d.data.nbr_list
-                        paytrk_authority(paytrk_auth)
-                        s.t_len = d.data.return_route.releaseReturnDropDown("T","")
-                       // s.l_len = d.data.release_route.releaseReturnDropDown("L", dtl[0].rlsd_retd_2_route_ctrl_nbr.toString())
-                        s.l_len = d.data.release_route.releaseReturnDropDown("L", dtl[0].vlt_dept_code)
-                        //s.t_len = s.to_return_route.length
-                        //s.l_len = s.to_release_route.length
-                        //s.di.dd_ToRelease_route = dtl[0].rlsd_retd_2_route_ctrl_nbr.toString();
-
-                        s.action_status = "RT"
-                        s.di.payroll_registry_descr = dtl[0].payroll_registry_descr
-
-                        $("#dttm").val(d.data.dt_tm);
-                        s.data_vl = dtl
-                        //s.di.dd_ToReturn_route = ""
-                        Required_Fields(dtl[0])
-                        $("#barcode_notfound").addClass("hidden")
-
-                        s.Data_Mode(dtl[0], s.l_len, s.t_len, "L")
-
-                        loading("hide")
-                        s.di.remarks = dtl[0].doc_remarks
-                        $("#remarks").val(dtl[0].doc_remarks)
-
-
-                    })
+                        });
+                     }
+                else
+                {
+                    loading("hide");
                 }
-                else {
-                    loading("hide")
-                }
+                //s.ToRecieve_Data = d.data.ToReceive.refreshTable('ToRecieve_Table', '');
+                //s.ToRelease_Data = d.data.ToRelease.refreshTable('ToRelease_Table', '');
+                //var dtl = []
+                //var rec = s.ToRecieve_Data.filter(function (d) {
+                //    return d.doc_ctrl_nbr == s.doc_ctrl_nbr
+                //})
+                //var rel = s.ToRelease_Data.filter(function (d) {
+                //    return d.doc_ctrl_nbr == s.doc_ctrl_nbr
+                //})
+                //if (rec.length > 0) {
+                //    dtl = rec
+                //}
+                //else if (rel.length > 0) {
+                //    dtl = rel
+                //}
+                //else if (rec.length <= 0 && rel.length <= 0) {
+                //    docctrlnbrNotFound();
+                //    loading("hide");
+                //    return;
+                //}
+                //var t = dtl[0].document_status
+                //if (t == "V")
+                //{
+                    //s.list_type = "V"
+                    //s.route_sequence = dtl[0].route_seq;
+
+                    //s.rel_rec_ret = "Receive"
+
+                    //var orig_route = dtl[0].route_ctrl_nbr
+                    //var docctrlnbr = dtl[0].doc_ctrl_nbr
+                    //h.post("../cMainPage/ReturnReleaseRouting", {docctrlnbr: docctrlnbr,par_action:t }).then(function (d) {
+                    //    s.temp_date_serv = d.data.dt_tm;
+                    //    s.change_date = false;
+                    //    s.doc_nbr_list = d.data.nbr_list
+                    //    var paytrk_auth = d.data.paytrk_auth
+                    //    paytrk_authority(paytrk_auth)
+                    //    s.action_status = "RV"
+                    //    s.di.payroll_registry_descr = dtl[0].payroll_registry_descr
+
+                    //    $("#dttm").val(d.data.dt_tm);
+                    //    s.data_vl = dtl
+                    //    Required_Fields(dtl[0])
+                    //    $("#barcode_notfound").addClass("hidden")
+                    //    s.allow_receive = true
+                    //    s.Data_Mode(dtl[0], s.l_len, s.t_len, "V")
+                    //    loading("hide")
+                    //    s.di.remarks = dtl[0].doc_remarks
+                    //    $("#remarks").val(dtl[0].doc_remarks)
+                    //})
+                //}
+                //else if (t == "L" || t == "T")
+                //{
+                //    s.route_sequence = dtl[0].route_seq;
+                //    s.list_type = "L"
+                //    s.rel_rec_ret = "Release"
+                //    s.allow_release = true;
+                //    s.allow_return = false;
+                //    var orig_route = dtl[0].department_code
+                //    var docctrlnbr = dtl[0].doc_ctrl_nbr
+                //    h.post("../cMainPage/ReturnReleaseRouting", { docctrlnbr: docctrlnbr, par_action: t  }).then(function (d) {
+                //        s.temp_date_serv = d.data.dt_tm;
+                //        s.change_date = false;
+                //        var paytrk_auth = d.data.paytrk_auth
+                //        s.doc_nbr_list = d.data.nbr_list
+                //        paytrk_authority(paytrk_auth)
+                //        s.t_len = d.data.return_route.releaseReturnDropDown("T","")
+                //       // s.l_len = d.data.release_route.releaseReturnDropDown("L", dtl[0].rlsd_retd_2_route_ctrl_nbr.toString())
+                //        s.l_len = d.data.release_route.releaseReturnDropDown("L", dtl[0].vlt_dept_code)
+                //        //s.t_len = s.to_return_route.length
+                //        //s.l_len = s.to_release_route.length
+                //        //s.di.dd_ToRelease_route = dtl[0].rlsd_retd_2_route_ctrl_nbr.toString();
+                //        s.action_status = "RT"
+                //        s.di.payroll_registry_descr = dtl[0].payroll_registry_descr
+
+                //        $("#dttm").val(d.data.dt_tm);
+                //        s.data_vl = dtl
+                //        //s.di.dd_ToReturn_route = ""
+                //        Required_Fields(dtl[0])
+                //        $("#barcode_notfound").addClass("hidden")
+
+                //        s.Data_Mode(dtl[0], s.l_len, s.t_len, "L")
+
+                //        loading("hide")
+                //        s.di.remarks = dtl[0].doc_remarks
+                //        $("#remarks").val(dtl[0].doc_remarks)
+
+
+                //    })
+                //}
+                //else {
+                //    loading("hide")
+                //}
 
             }
             else {

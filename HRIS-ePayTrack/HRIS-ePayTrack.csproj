@@ -275,6 +275,9 @@
     <Compile Include="Models\sp_dtr_transmittal_hdr_tbl_list_ATS_Result.cs">
       <DependentUpon>HRIS_TRK.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\sp_edocument_tk_2be_release_new_Result.cs">
+      <DependentUpon>HRIS_TRK.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\sp_edocument_trk_correct_2_route_Result.cs">
       <DependentUpon>HRIS_TRK.tt</DependentUpon>
     </Compile>

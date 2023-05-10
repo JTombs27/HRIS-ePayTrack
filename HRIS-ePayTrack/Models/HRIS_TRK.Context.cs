@@ -696,5 +696,18 @@ namespace HRIS_ePayTrack.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_edocument_trk_release_2_route_Result>("sp_edocument_trk_release_2_route", p_department_codeParameter, p_doc_ctrl_nbrParameter);
         }
+    
+        public virtual ObjectResult<sp_edocument_tk_2be_release_new_Result> sp_edocument_tk_2be_release_new(string par_department_code, string par_user)
+        {
+            var par_department_codeParameter = par_department_code != null ?
+                new ObjectParameter("par_department_code", par_department_code) :
+                new ObjectParameter("par_department_code", typeof(string));
+    
+            var par_userParameter = par_user != null ?
+                new ObjectParameter("par_user", par_user) :
+                new ObjectParameter("par_user", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_edocument_tk_2be_release_new_Result>("sp_edocument_tk_2be_release_new", par_department_codeParameter, par_userParameter);
+        }
     }
 }

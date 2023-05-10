@@ -53,8 +53,8 @@ namespace HRIS_ePayTrack.Controllers
                 //var departmentname = db.vw_department_tbl_list_TRK.Where(a => a.department_code == department_code).FirstOrDefault();
                 db.Database.CommandTimeout = int.MaxValue;
                 var dept                = Session["department_code"].ToString();
-                var ToReceive           = ""; //db.vw_edocument_trk_tbl_2be_rcvd.Where(a => a.department_code == dept).ToList();
-                var ToRelease           = ""; //db.vw_edocument_trk_tbl_2be_rlsd.Where(a => a.department_code == dept).ToList();
+                var ToReceive           = db.vw_edocument_trk_tbl_2be_rcvd.Where(a => a.department_code == dept).ToList();
+                var ToRelease           = db.sp_edocument_tk_2be_release_new(dept, Session["user_id"].ToString()).ToList();
                 
                 var DocType             = db.document_type_tbl_list().ToList();
                 var departmentnames     = db.vw_department_tbl_list_TRK.ToList();
@@ -892,19 +892,19 @@ namespace HRIS_ePayTrack.Controllers
                 //var ToReceive = db.vw_edocument_trk_tbl_2be_rcvd.Where(a => a.department_code == dept).ToList();
                 //var ToRelease = db.vw_edocument_trk_tbl_2be_rlsd.Where(a => a.department_code == dept).ToList();
 
-                var ToReceive = db.vw_edocument_trk_tbl_2be_rcvd.Where(a => a.doc_ctrl_nbr == doc_ctrl_nbr &&  a.department_code == dept).ToList();
-                var ToRelease = db.vw_edocument_trk_tbl_2be_rlsd.Where(a => a.doc_ctrl_nbr == doc_ctrl_nbr &&  a.department_code == dept).ToList();
+                var ToReceive = db.vw_edocument_trk_tbl_2be_rcvd.Where(a => a.doc_ctrl_nbr == doc_ctrl_nbr &&  a.department_code == dept).FirstOrDefault();
+                var ToRelease = db.vw_edocument_trk_tbl_2be_rlsd.Where(a => a.doc_ctrl_nbr == doc_ctrl_nbr &&  a.department_code == dept).FirstOrDefault();
 
                 //UPDATED BY JOSEPH
                 var V = ToReceive;
                 var L = ToRelease;
 
-                if (V.Count() > 0)
+                if (V != null)
                 {
                     dtl = V;
                     t = "V";
                 }
-                else if (L.Count() > 0)
+                else if (L != null)
                 {
                     dtl = L;
                     t = "L";
