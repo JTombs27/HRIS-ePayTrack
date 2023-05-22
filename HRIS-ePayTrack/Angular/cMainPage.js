@@ -981,7 +981,8 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
         else {
             doc_len = 6
         }
-        if (val.length == doc_len || val.length == doc_len) {
+        if (val.length == doc_len || val.length == doc_len)
+        {
             loading("show")
                 //UPDATED BY JOSEPH
                 //FETCH_DATA(val)
@@ -1102,7 +1103,6 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
 
         } catch (e) {
             FetchDataAgain();
-
         }
        
     }
@@ -1914,10 +1914,6 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
             s.doc_funcode_show = false
         }
         addvalueSearchDocModal("payroll_registry_descr", data.payroll_registry_descr)
-        
-
-
-
     }
 
 
@@ -4306,32 +4302,40 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
 
                 if (d.data.ToReceive != null) //Ang data naa sa to be received
                 {
-                    t = "V";
-                    s.list_type = "V";
-                    s.route_sequence = d.data.ToReceive.route_seq;
-                    s.rel_rec_ret = "Receive";
-                    var docctrlnbr = d.data.ToReceive.doc_ctrl_nbr;
-                    dtl = d.data.ToReceive;
-                    h.post("../cMainPage/ReturnReleaseRouting", { docctrlnbr: docctrlnbr, par_action: t })
-                        .then(function (d) {
-                            s.temp_date_serv = d.data.dt_tm;
-                            s.change_date = false;
-                            s.doc_nbr_list = d.data.nbr_list;
-                            var paytrk_auth = d.data.paytrk_auth;
-                            paytrk_authority(paytrk_auth);
-                            s.action_status = "RV";
-                            s.di.payroll_registry_descr = dtl.payroll_registry_descr;
-                            $("#dttm").val(d.data.dt_tm);
-                            s.data_vl = dtl;
-                            Required_Fields(dtl);
-                            $("#barcode_notfound").addClass("hidden");
-                            s.allow_receive = true;
-                            s.Data_Mode(dtl, s.l_len, s.t_len, "V");
-                            loading("hide");
-                            s.di.remarks = dtl.doc_remarks;
-                            $("#remarks").val(dtl.doc_remarks);
-                        }
-                        );
+                    t                   = "V";
+                    s.list_type         = "V";
+                    s.route_sequence    = d.data.ToReceive.route_seq;
+                    s.rel_rec_ret       = "Receive";
+                    var docctrlnbr      = d.data.ToReceive.doc_ctrl_nbr;
+                    dtl                 = d.data.ToReceive;
+                    Required_Fields(dtl);
+                    s.di.remarks = dtl.doc_remarks;
+                    s.data_vl = dtl;
+                    s.action_status = "RV";
+                    s.Data_Mode(dtl, s.l_len, s.t_len, "V");
+                    loading("hide");
+                    //h.post("../cMainPage/ReturnReleaseRouting", { docctrlnbr: docctrlnbr, par_action: t })
+                    //    .then(function (d)
+                    //    {
+                    //        s.temp_date_serv    = d.data.dt_tm;
+                    //        s.change_date       = false;
+                    //        s.doc_nbr_list      = d.data.nbr_list;
+                    //        var paytrk_auth     = d.data.paytrk_auth;
+                    //        paytrk_authority(paytrk_auth);
+                    //        s.action_status             = "RV";
+                    //        s.di.payroll_registry_descr = dtl.payroll_registry_descr;
+                    //        $("#dttm").val(d.data.dt_tm);
+                    //        s.data_vl                   = dtl;
+                    //        Required_Fields(dtl);
+                    //        $("#barcode_notfound").addClass("hidden");
+                    //        s.allow_receive             = true;
+                    //        s.Data_Mode(dtl, s.l_len, s.t_len, "V");
+                    //        loading("hide");
+                    //        s.di.remarks = dtl.doc_remarks;
+                    //        $("#remarks").val(dtl.doc_remarks);
+
+                    //    }
+                    //    );
 
                 }
                 else if (d.data.ToRelease != null) //Ang data naa sa to be received
@@ -4371,6 +4375,11 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
                 {
                     loading("hide");
                 }
+
+                //if (s.doc_ctrl_nbr.substring(0,2) == "LV")
+                //{
+                //    $("#lv-modal").modal({ keyboard: false, backdrop: "static" });
+                //}
                 //s.ToRecieve_Data = d.data.ToReceive.refreshTable('ToRecieve_Table', '');
                 //s.ToRelease_Data = d.data.ToRelease.refreshTable('ToRelease_Table', '');
                 //var dtl = []

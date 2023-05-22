@@ -62,6 +62,9 @@ namespace HRIS_ePayTrack.Models
         public virtual DbSet<vw_document_tracking_tbl_2be_rlsd_cr> vw_document_tracking_tbl_2be_rlsd_cr { get; set; }
         public virtual DbSet<cafao_dtl_tbl> cafao_dtl_tbl { get; set; }
         public virtual DbSet<vw_edocument_trk_tbl_2be_rlsd> vw_edocument_trk_tbl_2be_rlsd { get; set; }
+        public virtual DbSet<vw_edocument_trk_tbl_tobe_release> vw_edocument_trk_tbl_tobe_release { get; set; }
+        public virtual DbSet<leave_route_users> leave_route_users { get; set; }
+        public virtual DbSet<leave_routes> leave_routes { get; set; }
     
         public virtual ObjectResult<document_type_tbl_list_Result> document_type_tbl_list()
         {
@@ -708,6 +711,23 @@ namespace HRIS_ePayTrack.Models
                 new ObjectParameter("par_user", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_edocument_tk_2be_release_new_Result>("sp_edocument_tk_2be_release_new", par_department_codeParameter, par_userParameter);
+        }
+    
+        public virtual ObjectResult<sp_edocument_trk_release_V2_route_Result> sp_edocument_trk_release_V2_route(string p_department_code, string p_doc_ctrl_nbr, string p_user_id)
+        {
+            var p_department_codeParameter = p_department_code != null ?
+                new ObjectParameter("p_department_code", p_department_code) :
+                new ObjectParameter("p_department_code", typeof(string));
+    
+            var p_doc_ctrl_nbrParameter = p_doc_ctrl_nbr != null ?
+                new ObjectParameter("p_doc_ctrl_nbr", p_doc_ctrl_nbr) :
+                new ObjectParameter("p_doc_ctrl_nbr", typeof(string));
+    
+            var p_user_idParameter = p_user_id != null ?
+                new ObjectParameter("p_user_id", p_user_id) :
+                new ObjectParameter("p_user_id", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_edocument_trk_release_V2_route_Result>("sp_edocument_trk_release_V2_route", p_department_codeParameter, p_doc_ctrl_nbrParameter, p_user_idParameter);
         }
     }
 }

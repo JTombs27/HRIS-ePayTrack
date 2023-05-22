@@ -235,6 +235,12 @@
       <DependentUpon>HRIS_TRK.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\leave_routes.cs">
+      <DependentUpon>HRIS_TRK.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\leave_route_users.cs">
+      <DependentUpon>HRIS_TRK.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\sp_cafao_dtl_tbl_list_Result.cs">
       <DependentUpon>HRIS_TRK.tt</DependentUpon>
@@ -285,6 +291,9 @@
       <DependentUpon>HRIS_TRK.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sp_edocument_trk_release_2_route_Result.cs">
+      <DependentUpon>HRIS_TRK.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_edocument_trk_release_V2_route_Result.cs">
       <DependentUpon>HRIS_TRK.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sp_edocument_trk_return_2_route_Result.cs">
@@ -405,6 +414,9 @@
       <DependentUpon>HRIS_TRK.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\vw_edocument_trk_tbl_return.cs">
+      <DependentUpon>HRIS_TRK.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\vw_edocument_trk_tbl_tobe_release.cs">
       <DependentUpon>HRIS_TRK.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\vw_functions_tbl_list_TRK.cs">
