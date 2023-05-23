@@ -4195,45 +4195,144 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
     //**********************************************//
     s.btn_print_click_cafoa = function ()
     {
-        var controller  = "Reports"
-        var action      = "Index"
-        var ReportName  = "CrystalReport"
-        var SaveName = "Crystal_Report"
-        var ReportType = "inline"
-        var ReportPath = "~/Reports/"
-        var parameters = ""
-        var sp = ""
+        var controller  = "Reports";
+        var action      = "Index";
+        var ReportName  = "CrystalReport";
+        var SaveName    = "Crystal_Report";
+        var ReportType  = "inline";
+        var ReportPath  = "~/Reports/";
+        var sp          = "";
+        var parameters  = "";
 
-        h.post("../cMainPage/PreviousValuesonPage_cMainPage", {
+        
+      
 
-            par_doc_ctrl_nbr: s.doc_ctrl_nbr
-            , par_ddl_doc_status: s.ddl_doc_status
-            , par_track_year: s.track_year
-            , par_track_month: s.track_month
-            , par_ddl_reports: s.ddl_reports
-        }).then(function (d) { })
+
+        
+
+        //h.post("../cMainPage/PreviousValuesonPage_cMainPage", {
+
+        //    par_doc_ctrl_nbr: s.doc_ctrl_nbr
+        //    , par_ddl_doc_status: s.ddl_doc_status
+        //    , par_track_year: s.track_year
+        //    , par_track_month: s.track_month
+        //    , par_ddl_reports: s.ddl_reports
+        //}).then(function (d) { })
 
         if (s.ddl_reports_cafoa == "1")
         {
-            sp = "sp_payrollregistry_obr_rep";
-            parameters = "par_payroll_year," + s.payroll_year + ",par_payroll_registry_nbr," + s.payroll_registry_nbr + ",par_payrolltemplate_code," + s.data_vl[0].payrolltemplate_code
-            ReportPath = ReportPath + "cryOtherPayroll/cryOBR/cryOBR.rpt"
-            location.href = "../" + controller + "/" + action + "?ReportName=" + ReportName
+            parameters = "par_payroll_year," + s.payroll_year + ",par_payroll_registry_nbr," + s.payroll_registry_nbr + ",par_payrolltemplate_code," + s.data_vl.payrolltemplate_code;
+            ReportPath = ReportPath + "cryOtherPayroll/cryOBR/cryOBR.rpt";
+            sp = "sp_payrollregistry_obr_rep," + parameters;
+
+            var iframe = document.getElementById('iframe_print_preview');
+            var iframe_page = $("#iframe_print_preview")[0];
+
+            iframe.style.visibility = "hidden";
+
+            s.embed_link = "../Reports/CrystalViewer.aspx?Params=" + ""
+                + "&ReportName=" + ReportName
                 + "&SaveName=" + SaveName
                 + "&ReportType=" + ReportType
                 + "&ReportPath=" + ReportPath
-                + "&Sp=" + sp + "," + parameters
+                + "&id=" + sp;
+
+            if (!/*@cc_on!@*/0) {
+                iframe.onload = function () {
+                    iframe.style.visibility = "visible";
+                    $("#modal_generating_remittance").modal("hide")
+
+                };
+            }
+            else if (iframe_page.innerHTML()) {
+                // get and check the Title (and H tags if you want)
+                var ifTitle = iframe_page.contentDocument.title;
+                if (ifTitle.indexOf("404") >= 0) {
+                    swal("You cannot Preview this Report", "There something wrong!", { icon: "warning" });
+                    iframe.src = "";
+
+                    s.loading_r = false;
+                }
+                else if (ifTitle != "") {
+                    swal("You cannot Preview this Report", "There something wrong!", { icon: "warning" });
+                    iframe.src = "";
+
+                    s.loading_r = false;
+                    $('#print_preview_modal').modal("hide");
+                }
+            }
+            else {
+                iframe.onreadystatechange = function () {
+                    if (iframe.readyState == "complete") {
+                        iframe.style.visibility = "visible";
+
+                    }
+                };
+            }
+
+            s.loading_r = false;
+
+            iframe.src = s.embed_link;
+
+            $("#print_preview_modal").modal({ keyboard: false, backdrop: "static" });
         }
         else if (s.ddl_reports_cafoa == "2")
         {
-            sp = "sp_payrollregistry_cafao_rep_new";
-            parameters = "par_payroll_year," + s.payroll_year + ",par_payroll_registry_nbr," + s.payroll_registry_nbr + ",par_payrolltemplate_code," + s.data_vl[0].payrolltemplate_code
+            parameters = "par_payroll_year," + s.payroll_year + ",par_payroll_registry_nbr," + s.payroll_registry_nbr + ",par_payrolltemplate_code," + s.data_vl.payrolltemplate_code
             ReportPath = ReportPath + "cryOtherPayroll/cryOBR/cryOBR_CAFOA.rpt"
-            location.href = "../" + controller + "/" + action + "?ReportName=" + ReportName
+            sp = "sp_payrollregistry_cafao_rep_new," + parameters;
+
+            var iframe = document.getElementById('iframe_print_preview');
+            var iframe_page = $("#iframe_print_preview")[0];
+
+            iframe.style.visibility = "hidden";
+
+            s.embed_link = "../Reports/CrystalViewer.aspx?Params=" + ""
+                + "&ReportName=" + ReportName
                 + "&SaveName=" + SaveName
                 + "&ReportType=" + ReportType
                 + "&ReportPath=" + ReportPath
-                + "&Sp=" + sp + "," + parameters
+                + "&id=" + sp;
+
+            if (!/*@cc_on!@*/0) {
+                iframe.onload = function () {
+                    iframe.style.visibility = "visible";
+                    $("#modal_generating_remittance").modal("hide")
+
+                };
+            }
+            else if (iframe_page.innerHTML()) {
+                // get and check the Title (and H tags if you want)
+                var ifTitle = iframe_page.contentDocument.title;
+                if (ifTitle.indexOf("404") >= 0) {
+                    swal("You cannot Preview this Report", "There something wrong!", { icon: "warning" });
+                    iframe.src = "";
+
+                    s.loading_r = false;
+                }
+                else if (ifTitle != "") {
+                    swal("You cannot Preview this Report", "There something wrong!", { icon: "warning" });
+                    iframe.src = "";
+
+                    s.loading_r = false;
+                    $('#print_preview_modal').modal("hide");
+                }
+            }
+            else {
+                iframe.onreadystatechange = function () {
+                    if (iframe.readyState == "complete") {
+                        iframe.style.visibility = "visible";
+
+                    }
+                };
+            }
+
+            s.loading_r = false;
+
+            iframe.src = s.embed_link;
+
+            $("#print_preview_modal").modal({ keyboard: false, backdrop: "static" });
+           
         }
         else if (s.ddl_reports_cafoa == "3")
         {
@@ -4243,17 +4342,65 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
                 , par_payrolltemplate_code      : s.data_vl.payrolltemplate_code
 
             }).then(function (d) {
-                if (d.data.message = "success") {
+                if (d.data.message = "success")
+                {
+                   
+                    parameters = "par_payroll_year," + s.payroll_year + ",par_payroll_registry_nbr," + s.payroll_registry_nbr + ",par_payrolltemplate_code," + s.data_vl.payrolltemplate_code;
+                    ReportPath = "~/Reports/cryOtherPayroll/cryOBR/cryCAFAO.rpt";
+                    sp = "sp_payrollregistry_cafao_rep_new," + parameters;
 
 
-                    sp = "sp_payrollregistry_cafao_rep_new";
-                    parameters = "par_payroll_year," + s.payroll_year + ",par_payroll_registry_nbr," + s.payroll_registry_nbr + ",par_payrolltemplate_code," + s.data_vl[0].payrolltemplate_code
-                    ReportPath = ReportPath + "cryOtherPayroll/cryOBR/cryCAFAO.rpt"
-                    location.href = "../" + controller + "/" + action + "?ReportName=" + ReportName
+                    var iframe = document.getElementById('iframe_print_preview');
+                    var iframe_page = $("#iframe_print_preview")[0];
+
+                    iframe.style.visibility = "hidden";
+
+                    s.embed_link = "../Reports/CrystalViewer.aspx?Params=" + ""
+                        + "&ReportName=" + ReportName
                         + "&SaveName=" + SaveName
                         + "&ReportType=" + ReportType
                         + "&ReportPath=" + ReportPath
-                        + "&Sp=" + sp + "," + parameters
+                        + "&id=" + sp;
+
+                    if (!/*@cc_on!@*/0) {
+                        iframe.onload = function () {
+                            iframe.style.visibility = "visible";
+                            $("#modal_generating_remittance").modal("hide")
+
+                        };
+                    }
+                    else if (iframe_page.innerHTML()) {
+                        // get and check the Title (and H tags if you want)
+                        var ifTitle = iframe_page.contentDocument.title;
+                        if (ifTitle.indexOf("404") >= 0) {
+                            swal("You cannot Preview this Report", "There something wrong!", { icon: "warning" });
+                            iframe.src = "";
+
+                            s.loading_r = false;
+                        }
+                        else if (ifTitle != "") {
+                            swal("You cannot Preview this Report", "There something wrong!", { icon: "warning" });
+                            iframe.src = "";
+
+                            s.loading_r = false;
+                            $('#print_preview_modal').modal("hide");
+                        }
+                    }
+                    else {
+                        iframe.onreadystatechange = function () {
+                            if (iframe.readyState == "complete") {
+                                iframe.style.visibility = "visible";
+
+                            }
+                        };
+                    }
+
+                    s.loading_r = false;
+
+                    iframe.src = s.embed_link;
+
+                    $("#print_preview_modal").modal({ keyboard: false, backdrop: "static" });
+
                 } else {
                     swal("No Data Found !", "", "warning")
                 }
