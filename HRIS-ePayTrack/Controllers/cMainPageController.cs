@@ -61,10 +61,10 @@ namespace HRIS_ePayTrack.Controllers
                 var dept                = Session["department_code"].ToString();
                 if (paytrk_auth != "VW-ONL" && lv_user != null)
                 {
-                    my_leave_dep           = lv_user.route_code + "-" + lv_user.route_level;
-                    Session["my_leave_dep"] = my_leave_dep;
-                    Session["leave_route_code"]        = lv_user.route_code.ToString();
-                    Session["route_level"]             = lv_user.route_level;
+                    my_leave_dep                        = lv_user.route_code + "-" + lv_user.route_level;
+                    Session["my_leave_dep"]             = my_leave_dep;
+                    Session["leave_route_code"]         = lv_user.route_code.ToString();
+                    Session["route_level"]              = lv_user.route_level;
 
                     var ToReceive       = db.vw_edocument_trk_tbl_2be_rcvd.Where(a => a.department_code == dept || a.department_code == my_leave_dep).ToList();
                     var ToRelease       = db.vw_edocument_trk_tbl_tobe_release.Where(a => a.department_code == dept || a.department_code == my_leave_dep).ToList();
@@ -913,11 +913,12 @@ namespace HRIS_ePayTrack.Controllers
         public ActionResult FETCH_DATA(string doc_ctrl_nbr)
         {
             db.Database.CommandTimeout = int.MaxValue;
-            var t = "";
-            var dept = Session["department_code"].ToString();
-            role_id = Session["role_id"].ToString();
+            var t       = "";
+            var dept    = Session["department_code"].ToString();
+            role_id     = Session["role_id"].ToString();
             var message = "";
-            object dtl = new object();
+            object dtl          = new object();
+            object lv_details   = new object();
             db.Database.CommandTimeout = int.MaxValue;
             
             try
@@ -930,27 +931,29 @@ namespace HRIS_ePayTrack.Controllers
                 //var ToReceive = db.vw_edocument_trk_tbl_2be_rcvd.Where(a => a.department_code == dept).ToList();
                 //var ToRelease = db.vw_edocument_trk_tbl_2be_rlsd.Where(a => a.department_code == dept).ToList();
                 string my_leave_dep = Session["my_leave_dep"].ToString();
-                var ToReceive = db.vw_edocument_trk_tbl_2be_rcvd.Where(a => a.doc_ctrl_nbr == doc_ctrl_nbr &&  (a.department_code == dept || a.department_code == my_leave_dep) ).FirstOrDefault();
-                var ToRelease = db.vw_edocument_trk_tbl_tobe_release.Where(a => a.doc_ctrl_nbr == doc_ctrl_nbr && (a.department_code == dept || a.department_code == my_leave_dep)).FirstOrDefault();
+                var ToReceive       = db.vw_edocument_trk_tbl_2be_rcvd.Where(a => a.doc_ctrl_nbr == doc_ctrl_nbr &&  (a.department_code == dept || a.department_code == my_leave_dep) ).FirstOrDefault();
+                var ToRelease       = db.vw_edocument_trk_tbl_tobe_release.Where(a => a.doc_ctrl_nbr == doc_ctrl_nbr && (a.department_code == dept || a.department_code == my_leave_dep)).FirstOrDefault();
 
+                var leave_details   = db.sp_get_leave_transmittal_attachment(doc_ctrl_nbr, Session["user_id"].ToString()).ToList();
                 //UPDATED BY JOSEPH
                 var V = ToReceive;
                 var L = ToRelease;
 
+
                 if (V != null)
                 {
                     dtl = V;
-                    t = "V";
+                    t   = "V";
                 }
                 else if (L != null)
                 {
                     dtl = L;
-                    t = "L";
+                    t   = "L";
                     
                 }
 
                 message = "success";
-                return JSON(new { message, ToReceive, ToRelease,dtl,t}, JsonRequestBehavior.AllowGet);
+                return JSON(new { message, ToReceive, ToRelease,dtl,t, leave_details }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {

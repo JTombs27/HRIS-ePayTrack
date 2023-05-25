@@ -320,6 +320,9 @@
     <Compile Include="Models\sp_employmenttypes_tbl_list_Result.cs">
       <DependentUpon>HRIS_TRK.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\sp_get_leave_transmittal_attachment_Result.cs">
+      <DependentUpon>HRIS_TRK.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\sp_modules_tbl_list_TRK_Result.cs">
       <DependentUpon>HRIS_TRK.tt</DependentUpon>
     </Compile>

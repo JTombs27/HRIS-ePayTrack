@@ -1175,11 +1175,36 @@
                     </button>
                     <h3 class="modal-title" id="modalLabelSmall">Leave Applications</h3>
                 </div>
-                <div class="modal-body" style="padding:0px;">
-                    
-                </div>
-                <div class="modal-footer with-background" style="padding:10px;">
+                <div class="modal-body" style="max-height:500px;min-height:350px; overflow-y:scroll;">
+                    <table id="lv_details" class="table table-striped table-bordered table-hover table-responsive" style="width:100% !important;background-color:aliceblue;">
+                        <thead>
+                            <tr>
+                                <th style="font-size:14px; font-weight:bold;padding-top:5px; padding-bottom:5px;background-color:#18a689 !important;width:10% !important">LV. CTRL NBR</th>
+                                <th style="font-size:14px; font-weight:bold;padding-top:5px; padding-bottom:5px;background-color:#18a689 !important;width:25% !important">EMPLOYEE NAME</th>
+                                <th style="font-size:14px; font-weight:bold;padding-top:5px; padding-bottom:5px;background-color:#18a689 !important;width:15% !important">LEAVE TYPE</th>
+                                <th style="font-size:14px; font-weight:bold;padding-top:5px; padding-bottom:5px;background-color:#18a689 !important;width:15% !important">PERIOD</th>
+                                <th style="font-size:14px; font-weight:bold;padding-top:5px; padding-bottom:5px;background-color:#18a689 !important;width:35% !important">ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="lst in lv_detail track by $index">
+                                <td class="text-center" style="width:10% !important">{{lst.leave_ctrlno}}</td>
+                                <td style="width:25% !important">&nbsp;{{lst.employee_name}}</td>
+                                <td style="width:15% !important">&nbsp;{{lst.leavetype_descr}}</td>
+                                <td style="width:15% !important">&nbsp;{{lst.leaveledger_period}}</td>
+                                <td style="width:35% !important; vertical-align:middle !important;">
+                                    <input class="form-check-input" style="margin-top:7px !important;" ng-model="lst.employee_name" type="checkbox" id="checkboxNoLabel{{$index}}" value="" aria-label="...">
+                                    <label class="form-check-label" for="checkboxNoLabel{{$index}}">
+                                        Received
+                                    </label>
+                                </td>
+                            </tr>
 
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer with-background" style="padding:5px 5px">
+                    <button id="btn_print_click_cafoa" ng-click="btn_print_click_cafoa()" class="btn btn-primary dim"><i class="fa fa-print"> </i> <b>FINALIZE/RECIEVE</b></button>
                 </div>
             </div>
         </div>

@@ -43,6 +43,8 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
         it_from_name: "",
         it_from_off_pos:""
     }
+    //added By Joseph
+    s.lv_detail = [];
 
     s.transmittal_tbl = null
     s.di = {}
@@ -4449,6 +4451,7 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
 
                 if (d.data.ToReceive != null) //Ang data naa sa to be received
                 {
+                   
                     t                   = "V";
                     s.list_type         = "V";
                     s.route_sequence    = d.data.ToReceive.route_seq;
@@ -4461,6 +4464,11 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
                     s.action_status = "RV";
                     s.Data_Mode(dtl, s.l_len, s.t_len, "V");
                     loading("hide");
+                    if (s.doc_ctrl_nbr.substring(0, 2) == "LV")
+                    {
+                        s.lv_detail = d.data.leave_details;
+                        $("#lv-modal").modal({ keyboard: false, backdrop: "static" });
+                    }
                     //h.post("../cMainPage/ReturnReleaseRouting", { docctrlnbr: docctrlnbr, par_action: t })
                     //    .then(function (d)
                     //    {
@@ -4516,17 +4524,17 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
                             s.di.remarks = dtl.doc_remarks;
                             $("#remarks").val(dtl.doc_remarks);
 
+                            if (s.doc_ctrl_nbr.substring(0, 2) == "LV") {
+                                s.lv_detail = d.data.leave_details;
+                                $("#lv-modal").modal({ keyboard: false, backdrop: "static" });
+                            }
+
                         });
                      }
                 else
                 {
                     loading("hide");
                 }
-
-                //if (s.doc_ctrl_nbr.substring(0,2) == "LV")
-                //{
-                //    $("#lv-modal").modal({ keyboard: false, backdrop: "static" });
-                //}
                 //s.ToRecieve_Data = d.data.ToReceive.refreshTable('ToRecieve_Table', '');
                 //s.ToRelease_Data = d.data.ToRelease.refreshTable('ToRelease_Table', '');
                 //var dtl = []
