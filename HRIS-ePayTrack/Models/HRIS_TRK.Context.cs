@@ -742,5 +742,26 @@ namespace HRIS_ePayTrack.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_get_leave_transmittal_attachment_Result>("sp_get_leave_transmittal_attachment", par_doc_ctrl_nbrParameter, par_tracking_userParameter);
         }
+    
+        public virtual ObjectResult<string> sp_set_remarks_leave_tracking(string par_doc_ctrl_nbr, string par_ledger_ctrl_no, string par_remarks, string par_user_id)
+        {
+            var par_doc_ctrl_nbrParameter = par_doc_ctrl_nbr != null ?
+                new ObjectParameter("par_doc_ctrl_nbr", par_doc_ctrl_nbr) :
+                new ObjectParameter("par_doc_ctrl_nbr", typeof(string));
+    
+            var par_ledger_ctrl_noParameter = par_ledger_ctrl_no != null ?
+                new ObjectParameter("par_ledger_ctrl_no", par_ledger_ctrl_no) :
+                new ObjectParameter("par_ledger_ctrl_no", typeof(string));
+    
+            var par_remarksParameter = par_remarks != null ?
+                new ObjectParameter("par_remarks", par_remarks) :
+                new ObjectParameter("par_remarks", typeof(string));
+    
+            var par_user_idParameter = par_user_id != null ?
+                new ObjectParameter("par_user_id", par_user_id) :
+                new ObjectParameter("par_user_id", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("sp_set_remarks_leave_tracking", par_doc_ctrl_nbrParameter, par_ledger_ctrl_noParameter, par_remarksParameter, par_user_idParameter);
+        }
     }
 }

@@ -1227,6 +1227,12 @@ warning 6002: The table/view 'HRIS_TRK.dbo.vw_payrollregistry_info2_HRIS_TRK' do
         <Function Name="sp_payrolltemplate_tbl_list" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="par_employment_type" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="sp_set_remarks_leave_tracking" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="par_doc_ctrl_nbr" Type="varchar" Mode="In" />
+          <Parameter Name="par_ledger_ctrl_no" Type="varchar" Mode="In" />
+          <Parameter Name="par_remarks" Type="text" Mode="In" />
+          <Parameter Name="par_user_id" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="sp_update_dtr_transmittal_hdr_tbl_ATS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="p_transmittal_nbr" Type="varchar" Mode="In" />
         </Function>
@@ -2834,6 +2840,12 @@ warning 6002: The table/view 'HRIS_TRK.dbo.vw_payrollregistry_info2_HRIS_TRK' do
             <Parameter Name="par_doc_ctrl_nbr" Mode="In" Type="String" />
             <Parameter Name="par_tracking_user" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="sp_set_remarks_leave_tracking" ReturnType="Collection(String)">
+            <Parameter Name="par_doc_ctrl_nbr" Mode="In" Type="String" />
+            <Parameter Name="par_ledger_ctrl_no" Mode="In" Type="String" />
+            <Parameter Name="par_remarks" Mode="In" Type="String" />
+            <Parameter Name="par_user_id" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="document_type_tbl_list_Result">
           <Property Type="String" Name="docmnt_type" Nullable="false" MaxLength="2" />
@@ -3957,6 +3969,8 @@ warning 6002: The table/view 'HRIS_TRK.dbo.vw_payrollregistry_info2_HRIS_TRK' do
           <Property Type="String" Name="transmitted_flag" Nullable="false" MaxLength="1" />
           <Property Type="DateTime" Name="final_approval_date" Nullable="true" Precision="23" />
           <Property Type="String" Name="employment_type" Nullable="false" MaxLength="2" />
+          <Property Type="Boolean" Name="check_defualt" Nullable="true" />
+          <Property Type="String" Name="remarks" Nullable="false" MaxLength="1" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -5830,9 +5844,12 @@ warning 6002: The table/view 'HRIS_TRK.dbo.vw_payrollregistry_info2_HRIS_TRK' do
                 <ScalarProperty Name="transmitted_flag" ColumnName="transmitted_flag" />
                 <ScalarProperty Name="final_approval_date" ColumnName="final_approval_date" />
                 <ScalarProperty Name="employment_type" ColumnName="employment_type" />
+                <ScalarProperty Name="check_defualt" ColumnName="check_defualt" />
+                <ScalarProperty Name="remarks" ColumnName="remarks" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_set_remarks_leave_tracking" FunctionName="HRIS_TRKModel.Store.sp_set_remarks_leave_tracking" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

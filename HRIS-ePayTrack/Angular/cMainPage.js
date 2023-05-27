@@ -1323,6 +1323,11 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
                   
                     if (d.data.message == "success")
                     {
+                        if (s.data_vl.doc_ctrl_nbr.substring(0,2) == "LV")
+                        {
+                            $("#lv-modal").modal("hide");
+                        }
+
                         if (s.ds.department_code == "03") {
                             h.post("../cMainPage/UpdateDocLink", { it_control_nbr: s.di.it_control_nbr, doc_ctrl_nbr: s.data_vl.doc_ctrl_nbr }).then(function (f) {
                                 s.document_tracking_link_tbl = d.data.nlink;
@@ -1371,6 +1376,10 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
                         ClearDocInfoFields2();
                         cs.spinnerRemove("rlsd", "fa-forward")
                         cs.spinnerRemove("rcvd", "fa-backward")
+
+                        s.allow_receive = false;
+                        s.allow_release = false;
+                        s.allow_cafoa   = false;
                        
                     }
                     else {
@@ -1384,6 +1393,20 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
         })
     }
 
+    s.save_remarks = function (e, lst)
+    {
+        if (e.key.toString() == "Enter")
+        {
+            h.post("../cMainPage/sp_set_remarks_leave_tracking", { par_doc_ctrl_nbr: lst.doc_ctrl_nbr, par_ledger_ctrl_no: lst.ledger_ctrl_no, remarks: lst.remarks })
+                .then(function (d)
+                {
+                    if (d.data.message == "success")
+                    {
+                        alert("Remarks Successfully Saved!");
+                    }
+                });
+        }
+    }
    
     s.ReceiveRoute = function (D)
     {
@@ -4469,28 +4492,6 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
                         s.lv_detail = d.data.leave_details;
                         $("#lv-modal").modal({ keyboard: false, backdrop: "static" });
                     }
-                    //h.post("../cMainPage/ReturnReleaseRouting", { docctrlnbr: docctrlnbr, par_action: t })
-                    //    .then(function (d)
-                    //    {
-                    //        s.temp_date_serv    = d.data.dt_tm;
-                    //        s.change_date       = false;
-                    //        s.doc_nbr_list      = d.data.nbr_list;
-                    //        var paytrk_auth     = d.data.paytrk_auth;
-                    //        paytrk_authority(paytrk_auth);
-                    //        s.action_status             = "RV";
-                    //        s.di.payroll_registry_descr = dtl.payroll_registry_descr;
-                    //        $("#dttm").val(d.data.dt_tm);
-                    //        s.data_vl                   = dtl;
-                    //        Required_Fields(dtl);
-                    //        $("#barcode_notfound").addClass("hidden");
-                    //        s.allow_receive             = true;
-                    //        s.Data_Mode(dtl, s.l_len, s.t_len, "V");
-                    //        loading("hide");
-                    //        s.di.remarks = dtl.doc_remarks;
-                    //        $("#remarks").val(dtl.doc_remarks);
-
-                    //    }
-                    //    );
 
                 }
                 else if (d.data.ToRelease != null) //Ang data naa sa to be received
@@ -4504,18 +4505,18 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
                     var orig_route      = dtl.department_code;
                     var docctrlnbr      = dtl.doc_ctrl_nbr;
                     h.post("../cMainPage/ReturnReleaseRouting", { docctrlnbr: docctrlnbr, par_action: t })
-                        .then(function (d)
+                        .then(function (dR)
                         {
-                            s.temp_date_serv    = d.data.dt_tm;
+                            s.temp_date_serv = dR.data.dt_tm;
                             s.change_date       = false;
-                            var paytrk_auth     = d.data.paytrk_auth;
+                            var paytrk_auth = dR.data.paytrk_auth;
                             paytrk_authority(paytrk_auth);
-                            s.doc_nbr_list              = d.data.nbr_list;
-                            s.t_len                     = d.data.return_route.releaseReturnDropDown("T", "");
-                            s.l_len                     = d.data.release_route.releaseReturnDropDown("L", dtl.vlt_dept_code);
+                            s.doc_nbr_list              = dR.data.nbr_list;
+                            s.t_len                     = dR.data.return_route.releaseReturnDropDown("T", "");
+                            s.l_len                     = dR.data.release_route.releaseReturnDropDown("L", dtl.vlt_dept_code);
                             s.action_status             = "RT";
                             s.di.payroll_registry_descr = dtl.payroll_registry_descr;
-                            $("#dttm").val(d.data.dt_tm);
+                            $("#dttm").val(dR.data.dt_tm);
                             s.data_vl = dtl;
                             Required_Fields(dtl);
                             $("#barcode_notfound").addClass("hidden");
@@ -4533,6 +4534,9 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
                      }
                 else
                 {
+                    s.allow_receive = false;
+                    s.allow_release = false;
+                    s.allow_cafoa = false;
                     loading("hide");
                 }
                 //s.ToRecieve_Data = d.data.ToReceive.refreshTable('ToRecieve_Table', '');

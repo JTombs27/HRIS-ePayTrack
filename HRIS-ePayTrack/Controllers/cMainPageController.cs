@@ -66,8 +66,8 @@ namespace HRIS_ePayTrack.Controllers
                     Session["leave_route_code"]         = lv_user.route_code.ToString();
                     Session["route_level"]              = lv_user.route_level;
 
-                    var ToReceive       = db.vw_edocument_trk_tbl_2be_rcvd.Where(a => a.department_code == dept || a.department_code == my_leave_dep).ToList();
-                    var ToRelease       = db.vw_edocument_trk_tbl_tobe_release.Where(a => a.department_code == dept || a.department_code == my_leave_dep).ToList();
+                    var ToReceive       = db.vw_edocument_trk_tbl_2be_rcvd.Where(a => a.department_code == dept || a.department_code == my_leave_dep || (a.department_code.Substring(2,(a.department_code.Length-1)) == my_leave_dep && a.docmnt_type == "LV")).ToList();
+                    var ToRelease       = db.vw_edocument_trk_tbl_tobe_release.Where(a => a.department_code == dept || a.department_code == my_leave_dep || (a.department_code.Substring(2, (a.department_code.Length - 1)) == my_leave_dep && a.docmnt_type == "LV")).ToList();
                     var DocType         = db.document_type_tbl_list().ToList();
                     var departmentnames = db.vw_department_tbl_list_TRK.ToList();
                     var docfundcode     = db.vw_cashadv_fund_sub_tbl_TRK;
@@ -128,6 +128,26 @@ namespace HRIS_ePayTrack.Controllers
                 return val;
             }
         }
+
+        public ActionResult sp_set_remarks_leave_tracking(string par_doc_ctrl_nbr,string par_ledger_ctrl_no,string remarks)
+        {
+            db.Database.CommandTimeout = int.MaxValue;
+            var dept = Session["department_code"].ToString();
+            var userid = Session["user_id"].ToString();
+            string message = "";
+            try
+            {
+                db.sp_set_remarks_leave_tracking(par_doc_ctrl_nbr, par_ledger_ctrl_no, remarks, userid);  
+                return JSON(new { message = "success" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (DbEntityValidationException e)
+            {
+                message = DbEntityValidationExceptionError(e);
+
+                return JSON(new { message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public ActionResult sp_document_tracking_nbrs_tbl_update(vw_edocument_trk_tbl_2be_rcvd det, DocTrack dt)
         {
             db.Database.CommandTimeout = int.MaxValue;
@@ -931,8 +951,8 @@ namespace HRIS_ePayTrack.Controllers
                 //var ToReceive = db.vw_edocument_trk_tbl_2be_rcvd.Where(a => a.department_code == dept).ToList();
                 //var ToRelease = db.vw_edocument_trk_tbl_2be_rlsd.Where(a => a.department_code == dept).ToList();
                 string my_leave_dep = Session["my_leave_dep"].ToString();
-                var ToReceive       = db.vw_edocument_trk_tbl_2be_rcvd.Where(a => a.doc_ctrl_nbr == doc_ctrl_nbr &&  (a.department_code == dept || a.department_code == my_leave_dep) ).FirstOrDefault();
-                var ToRelease       = db.vw_edocument_trk_tbl_tobe_release.Where(a => a.doc_ctrl_nbr == doc_ctrl_nbr && (a.department_code == dept || a.department_code == my_leave_dep)).FirstOrDefault();
+                var ToReceive       = db.vw_edocument_trk_tbl_2be_rcvd.Where(a => a.doc_ctrl_nbr == doc_ctrl_nbr &&  (a.department_code == dept || a.department_code == my_leave_dep || (a.department_code.Substring(2, (a.department_code.Length - 1)) == my_leave_dep && a.docmnt_type == "LV")) ).FirstOrDefault();
+                var ToRelease       = db.vw_edocument_trk_tbl_tobe_release.Where(a => a.doc_ctrl_nbr == doc_ctrl_nbr && (a.department_code == dept || a.department_code == my_leave_dep || (a.department_code.Substring(2, (a.department_code.Length - 1)) == my_leave_dep && a.docmnt_type == "LV"))).FirstOrDefault();
 
                 var leave_details   = db.sp_get_leave_transmittal_attachment(doc_ctrl_nbr, Session["user_id"].ToString()).ToList();
                 //UPDATED BY JOSEPH

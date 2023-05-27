@@ -1193,10 +1193,12 @@
                                 <td style="width:15% !important">&nbsp;{{lst.leavetype_descr}}</td>
                                 <td style="width:15% !important">&nbsp;{{lst.leaveledger_period}}</td>
                                 <td style="width:35% !important; vertical-align:middle !important;">
-                                    <input class="form-check-input" style="margin-top:7px !important;" ng-model="lst.employee_name" type="checkbox" id="checkboxNoLabel{{$index}}" value="" aria-label="...">
+                                    
+                                    <input class="form-check-input" style="margin-top:7px !important;" ng-model="lst.check_defualt" ng-checked="lst.check_defualt" type="checkbox" id="checkboxNoLabel{{$index}}" value="" aria-label="...">
                                     <label class="form-check-label" for="checkboxNoLabel{{$index}}">
-                                        Received
+                                        {{lst.check_defualt ? "Received":"Remarks:"}}
                                     </label>
+                                    <input type="text" class="form-control font-bold pull-right" ng-keyup="save_remarks($event,lst)" style="width:80%;" id="lb_remarks{{$index}}"  placeholder="Enter Remarks..." ng-disabled="lst.check_defualt" ng-model="lst.remarks" >
                                 </td>
                             </tr>
 
@@ -1204,7 +1206,28 @@
                     </table>
                 </div>
                 <div class="modal-footer with-background" style="padding:5px 5px">
-                    <button id="btn_print_click_cafoa" ng-click="btn_print_click_cafoa()" class="btn btn-primary dim"><i class="fa fa-print"> </i> <b>FINALIZE/RECIEVE</b></button>
+                    <div class="row form-group">
+                        <span class="col-lg-3  font-bold" ng-show="show_release_btn">Release to:</span>
+                        <div class="col-lg-3" style="margin-bottom:3px" ng-show="show_release_btn">
+                            <select class="form-control f-Border" id="dd_ToRelease_route" ng-model="di.dd_ToRelease_route" ng-change="ToReleaseRouteSelect(di.dd_ToRelease_route)">
+                                <option value=""> -- Select here --</option>
+                                <option ng-repeat="l in to_release_route" value="{{l.department_code}}">{{l.department_short_name}}</option>
+                            </select>
+                            <small class="col-lg-12 text-info text-left dd_ToRelease_route hidden" style="font-size:12px;height:15px;color:red; float:left;">  <i class="fa fa-info-circle"></i>Required field! </small>
+
+                        </div>
+                        <div class="col-lg-3 pull-right" style="margin-bottom:5px" ng-show="show_return_btn">
+                            <select class="form-control f-Border" id="dd_ToReturn_route" ng-model="di.dd_ToReturn_route" ng-change="ToReturnRouteSelect(di.dd_ToReturn_route)">
+                                <option value="">-- Select here --</option>
+                                <option ng-repeat="l in to_return_route" value="{{l.department_code}}">{{l.department_short_name}}</option>
+                            </select>
+                            <small class="col-lg-12 text-info text-right dd_ToReturn_route hidden" style="font-size:12px;height:15px;color:red">  <i class="fa fa-info-circle"></i>Required field! </small>
+                        </div>
+                        <span class="col-lg-2 font-bold pull-right" style="margin-top:5px;" ng-show="show_return_btn">Return to : </span>
+                        <button class="btn btn-primary dim pull-right" id="btn_rlsd" ng-show="allow_release" ng-click="ReleaseRoute(di)"><i id="rlsd" class="rlsd fa fa-forward"></i> Release</button>
+                        <button class="btn btn-success dim pull-right" id="btn_rcvd" ng-show="allow_receive" ng-click="ReceiveRoute(di)"><i id="rcvd" class="rcvd fa fa-backward"></i> Receive</button>
+                    </div>
+                    
                 </div>
             </div>
         </div>
