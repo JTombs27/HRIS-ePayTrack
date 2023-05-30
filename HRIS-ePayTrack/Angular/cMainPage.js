@@ -4536,7 +4536,7 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
                 {
                     s.allow_receive = false;
                     s.allow_release = false;
-                    s.allow_cafoa = false;
+                    s.allow_cafoa = false;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
                     loading("hide");
                 }
                 //s.ToRecieve_Data = d.data.ToReceive.refreshTable('ToRecieve_Table', '');
