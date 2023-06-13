@@ -273,11 +273,11 @@ namespace HRIS_ePayTrack.Controllers
                     edocument_trk_tbl doc   = new edocument_trk_tbl();
                     doc.doc_ctrl_nbr        = det.doc_ctrl_nbr;
                     doc.route_seq           = (int)det.route_seq;
-                    doc.department_code     = det.doc_ctrl_nbr.Substring(0,3) == "LV-" ?  Session["route_level"].ToString():dept;
+                    doc.department_code     = (det.doc_ctrl_nbr.Substring(0,3) == "LV-" ?  Session["route_level"].ToString():dept.ToString());
                     doc.vlt_dept_code       = routTo;
-                    doc.doc_dttm            = Convert.ToDateTime(dtm);
+                    doc.doc_dttm            = DateTime.Now;//Convert.ToDateTime(dtm);
                     doc.doc_user_id         = userid;
-                    doc.doc_remarks         = dt.remarks;
+                    doc.doc_remarks = "";//dt.remarks;
                     doc.document_status = doc_status;
                     db.edocument_trk_tbl.Add(doc);
                      db.SaveChanges();
@@ -297,9 +297,9 @@ namespace HRIS_ePayTrack.Controllers
                     //Updated By: Joseph M. Tombo Jr. 12-15-2020 Added the refresh_grid flag in the return
                     return JSON(new { message, ToReceive, ToRelease, swl, refresh_grid }, JsonRequestBehavior.AllowGet);
             }
-            catch (DbEntityValidationException e)
+            catch (Exception e)
             {
-                message = DbEntityValidationExceptionError(e);
+                message = e.Message;//DbEntityValidationExceptionError(e);
 
                 return JSON(new { message }, JsonRequestBehavior.AllowGet);
             }
