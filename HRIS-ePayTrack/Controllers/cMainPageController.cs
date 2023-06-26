@@ -78,7 +78,7 @@ namespace HRIS_ePayTrack.Controllers
                 }
                 else if (paytrk_auth == "VW-ONL" && lv_user != null)
                 {
-                    my_leave_dep = lv_user.route_code + "-" + lv_user.route_level;
+                    my_leave_dep =  lv_user.route_level;
                     Session["my_leave_dep"] = my_leave_dep;
                     Session["leave_route_code"] = lv_user.route_code.ToString();
                     Session["route_level"] = lv_user.route_level;
@@ -96,8 +96,8 @@ namespace HRIS_ePayTrack.Controllers
                 }
                 else
                 {
-                    var ToReceive = db.vw_edocument_trk_tbl_2be_rcvd.Where(a => a.department_code == dept).ToList();
-                    var ToRelease = db.vw_edocument_trk_tbl_tobe_release.Where(a => a.department_code == dept).ToList();
+                    var ToReceive = db.vw_edocument_trk_tbl_2be_rcvd.Where(a => a.department_code == dept && a.docmnt_type != "LV").ToList();
+                    var ToRelease = db.vw_edocument_trk_tbl_tobe_release.Where(a => a.department_code == dept && a.docmnt_type != "LV").ToList();
                     var DocType = db.document_type_tbl_list().ToList();
                     var departmentnames = db.vw_department_tbl_list_TRK.ToList();
                     var docfundcode = db.vw_cashadv_fund_sub_tbl_TRK;
