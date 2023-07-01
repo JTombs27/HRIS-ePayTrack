@@ -59,10 +59,14 @@ namespace HRIS_ePayTrack.Controllers
                 //var departmentname = db.vw_department_tbl_list_TRK.Where(a => a.department_code == department_code).FirstOrDefault();
                 db.Database.CommandTimeout = int.MaxValue;
                 var dept                = Session["department_code"].ToString();
+                if (lv_user != null)
+                {
+                    my_leave_dep = lv_user.route_code + "-" + lv_user.route_level;
+                    Session["my_leave_dep"] = my_leave_dep;
+                }
                 if (paytrk_auth != "VW-ONL" && lv_user != null)
                 {
-                    my_leave_dep                        = lv_user.route_code + "-" + lv_user.route_level;
-                    Session["my_leave_dep"]             = my_leave_dep;
+                    
                     Session["leave_route_code"]         = lv_user.route_code.ToString();
                     Session["route_level"]              = lv_user.route_level;
 
@@ -78,8 +82,8 @@ namespace HRIS_ePayTrack.Controllers
                 }
                 else if (paytrk_auth == "VW-ONL" && lv_user != null)
                 {
-                    my_leave_dep =  lv_user.route_level;
-                    Session["my_leave_dep"] = my_leave_dep;
+                    //my_leave_dep =  lv_user.route_level;
+                    //Session["my_leave_dep"] = my_leave_dep;
                     Session["leave_route_code"] = lv_user.route_code.ToString();
                     Session["route_level"] = lv_user.route_level;
 
