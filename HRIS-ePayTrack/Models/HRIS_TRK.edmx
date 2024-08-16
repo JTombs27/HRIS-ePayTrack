@@ -167,7 +167,7 @@
           <Property Name="gross_pay" Type="money" />
           <Property Name="net_pay" Type="money" />
           <Property Name="function_code" Type="varchar" MaxLength="8" />
-          <Property Name="payroll_group_nbr" Type="varchar" MaxLength="5" />
+          <Property Name="payroll_group_nbr" Type="varchar" MaxLength="8" />
         </EntityType>
         <EntityType Name="edocument_trk_tbl">
           <Key>
@@ -206,6 +206,7 @@
           <Property Name="route_descr" Type="varchar" MaxLength="500" Nullable="false" />
           <Property Name="route_short_descr" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="route_level" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="routing_level" Type="int" Nullable="false" />
           <Property Name="created_by" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="created_dttm" Type="datetime" Nullable="false" />
           <Property Name="updated_by" Type="varchar" MaxLength="15" />
@@ -769,6 +770,7 @@ warning 6002: The table/view 'HRIS_TRK.dbo.vw_edocument_trk_tbl_2be_rcvd' does n
         <EntityType Name="vw_edocument_trk_tbl_2be_rcvd">
           <Key>
             <PropertyRef Name="doc_ctrl_nbr" />
+            <PropertyRef Name="department_code" />
             <PropertyRef Name="doc_fund_subcode" />
             <PropertyRef Name="doc_pbo_nbr" />
             <PropertyRef Name="doc_cafoa" />
@@ -780,12 +782,11 @@ warning 6002: The table/view 'HRIS_TRK.dbo.vw_edocument_trk_tbl_2be_rcvd' does n
             <PropertyRef Name="new_row_flag" />
             <PropertyRef Name="with_data_link" />
             <PropertyRef Name="data_mode" />
-            <PropertyRef Name="department_code" />
             <PropertyRef Name="required_doc" />
           </Key>
           <Property Name="doc_ctrl_nbr" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="route_seq" Type="int" />
-          <Property Name="department_code" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="department_code" Type="varchar" MaxLength="2" Nullable="false" />
           <Property Name="docmnt_type" Type="varchar" MaxLength="4" />
           <Property Name="doc_dttm" Type="varchar" MaxLength="25" />
           <Property Name="doc_remarks" Type="varchar" MaxLength="255" />
@@ -879,19 +880,18 @@ warning 6002: The table/view 'HRIS_TRK.dbo.vw_edocument_trk_tbl_return' does not
 warning 6002: The table/view 'HRIS_TRK.dbo.vw_edocument_trk_tbl_tobe_release' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vw_edocument_trk_tbl_tobe_release">
           <Key>
+            <PropertyRef Name="department_code" />
             <PropertyRef Name="document_status" />
             <PropertyRef Name="required_doc_type" />
             <PropertyRef Name="new_row_flag" />
             <PropertyRef Name="with_data_link" />
             <PropertyRef Name="data_mode" />
             <PropertyRef Name="doc_ctrl_nbr" />
-            <PropertyRef Name="department_code" />
-            <PropertyRef Name="docmnt_type" />
           </Key>
           <Property Name="doc_ctrl_nbr" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="route_seq" Type="int" />
-          <Property Name="department_code" Type="varchar" MaxLength="5" Nullable="false" />
-          <Property Name="docmnt_type" Type="varchar" MaxLength="4" Nullable="false" />
+          <Property Name="department_code" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="docmnt_type" Type="varchar" MaxLength="4" />
           <Property Name="doc_dttm" Type="varchar" MaxLength="25" />
           <Property Name="doc_remarks" Type="varchar" MaxLength="266" />
           <Property Name="doc_fund_subcode" Type="varchar" MaxLength="20" />
@@ -1970,7 +1970,7 @@ warning 6002: The table/view 'HRIS_TRK.dbo.vw_payrollregistry_info2_HRIS_TRK' do
           <Property Name="gross_pay" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="net_pay" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="function_code" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Name="payroll_group_nbr" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="payroll_group_nbr" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="edocument_trk_tbl">
           <Key>
@@ -2828,7 +2828,6 @@ warning 6002: The table/view 'HRIS_TRK.dbo.vw_payrollregistry_info2_HRIS_TRK' do
             <Parameter Name="par_department_code" Mode="In" Type="String" />
             <Parameter Name="par_user" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="vw_edocument_trk_tbl_tobe_release" EntityType="HRIS_TRKModel.vw_edocument_trk_tbl_tobe_release" />
           <FunctionImport Name="sp_edocument_trk_release_V2_route" ReturnType="Collection(HRIS_TRKModel.sp_edocument_trk_release_V2_route_Result)">
             <Parameter Name="p_department_code" Mode="In" Type="String" />
             <Parameter Name="p_doc_ctrl_nbr" Mode="In" Type="String" />
@@ -2846,6 +2845,7 @@ warning 6002: The table/view 'HRIS_TRK.dbo.vw_payrollregistry_info2_HRIS_TRK' do
             <Parameter Name="par_remarks" Mode="In" Type="String" />
             <Parameter Name="par_user_id" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="vw_edocument_trk_tbl_tobe_release" EntityType="HRIS_TRKModel.vw_edocument_trk_tbl_tobe_release" />
         </EntityContainer>
         <ComplexType Name="document_type_tbl_list_Result">
           <Property Type="String" Name="docmnt_type" Nullable="false" MaxLength="2" />
@@ -3571,7 +3571,7 @@ warning 6002: The table/view 'HRIS_TRK.dbo.vw_payrollregistry_info2_HRIS_TRK' do
           </Key>
           <Property Name="doc_ctrl_nbr" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="route_seq" Type="Int32" />
-          <Property Name="department_code" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="department_code" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Name="docmnt_type" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
           <Property Name="doc_dttm" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
           <Property Name="doc_remarks" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
@@ -3882,45 +3882,6 @@ warning 6002: The table/view 'HRIS_TRK.dbo.vw_payrollregistry_info2_HRIS_TRK' do
           <Property Type="String" Name="payroll_month" Nullable="true" MaxLength="2" />
           <Property Type="String" Name="payrolltemplate_descr" Nullable="true" MaxLength="255" />
         </ComplexType>
-        <EntityType Name="vw_edocument_trk_tbl_tobe_release">
-          <Key>
-            <PropertyRef Name="document_status" />
-            <PropertyRef Name="required_doc_type" />
-            <PropertyRef Name="new_row_flag" />
-            <PropertyRef Name="with_data_link" />
-            <PropertyRef Name="data_mode" />
-            <PropertyRef Name="doc_ctrl_nbr" />
-            <PropertyRef Name="department_code" />
-            <PropertyRef Name="docmnt_type" />
-          </Key>
-          <Property Name="doc_ctrl_nbr" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="route_seq" Type="Int32" />
-          <Property Name="department_code" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="docmnt_type" Type="String" MaxLength="4" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="doc_dttm" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-          <Property Name="doc_remarks" Type="String" MaxLength="266" FixedLength="false" Unicode="false" />
-          <Property Name="doc_fund_subcode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="doc_pbo_nbr" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Name="doc_cafoa" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="doc_voucher_nbr" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="doc_pto_nbr" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="document_status" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="document_status_descr" Type="String" MaxLength="266" FixedLength="false" Unicode="false" />
-          <Property Name="vlt_dept_code" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="required_doc" Type="Int32" />
-          <Property Name="required_doc_type" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Name="new_row_flag" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="with_data_link" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="data_mode" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Name="docmnt_type_source" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
-          <Property Name="payroll_registry_descr" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="gross_pay" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="net_pay" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="payrolltemplate_code" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Name="payroll_year" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
-          <Property Name="payroll_month" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Name="payrolltemplate_descr" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-        </EntityType>
         <ComplexType Name="sp_edocument_trk_release_V2_route_Result">
           <Property Type="String" Name="department_code" Nullable="false" MaxLength="2" />
           <Property Type="String" Name="department_short_name" Nullable="true" MaxLength="30" />
@@ -3953,6 +3914,7 @@ warning 6002: The table/view 'HRIS_TRK.dbo.vw_payrollregistry_info2_HRIS_TRK' do
           <Property Name="updated_by" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="updated_dttm" Type="DateTime" Precision="3" />
           <Property Name="route_short_descr" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="routing_level" Type="Int32" Nullable="false" />
         </EntityType>
         <ComplexType Name="sp_get_leave_transmittal_attachment_Result">
           <Property Type="String" Name="ledger_ctrl_no" Nullable="false" MaxLength="10" />
@@ -3972,6 +3934,44 @@ warning 6002: The table/view 'HRIS_TRK.dbo.vw_payrollregistry_info2_HRIS_TRK' do
           <Property Type="Boolean" Name="check_defualt" Nullable="true" />
           <Property Type="String" Name="remarks" Nullable="false" MaxLength="1" />
         </ComplexType>
+        <EntityType Name="vw_edocument_trk_tbl_tobe_release">
+          <Key>
+            <PropertyRef Name="department_code" />
+            <PropertyRef Name="document_status" />
+            <PropertyRef Name="required_doc_type" />
+            <PropertyRef Name="new_row_flag" />
+            <PropertyRef Name="with_data_link" />
+            <PropertyRef Name="data_mode" />
+            <PropertyRef Name="doc_ctrl_nbr" />
+          </Key>
+          <Property Name="doc_ctrl_nbr" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="route_seq" Type="Int32" />
+          <Property Name="department_code" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="docmnt_type" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="doc_dttm" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="doc_remarks" Type="String" MaxLength="266" FixedLength="false" Unicode="false" />
+          <Property Name="doc_fund_subcode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="doc_pbo_nbr" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="doc_cafoa" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="doc_voucher_nbr" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="doc_pto_nbr" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="document_status" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="document_status_descr" Type="String" MaxLength="266" FixedLength="false" Unicode="false" />
+          <Property Name="vlt_dept_code" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="required_doc" Type="Int32" />
+          <Property Name="required_doc_type" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="new_row_flag" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="with_data_link" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="data_mode" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="docmnt_type_source" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="payroll_registry_descr" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="gross_pay" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="net_pay" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="payrolltemplate_code" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="payroll_year" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="payroll_month" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="payrolltemplate_descr" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5758,39 +5758,6 @@ warning 6002: The table/view 'HRIS_TRK.dbo.vw_payrollregistry_info2_HRIS_TRK' do
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="vw_edocument_trk_tbl_tobe_release">
-            <EntityTypeMapping TypeName="HRIS_TRKModel.vw_edocument_trk_tbl_tobe_release">
-              <MappingFragment StoreEntitySet="vw_edocument_trk_tbl_tobe_release">
-                <ScalarProperty Name="payrolltemplate_descr" ColumnName="payrolltemplate_descr" />
-                <ScalarProperty Name="payroll_month" ColumnName="payroll_month" />
-                <ScalarProperty Name="payroll_year" ColumnName="payroll_year" />
-                <ScalarProperty Name="payrolltemplate_code" ColumnName="payrolltemplate_code" />
-                <ScalarProperty Name="net_pay" ColumnName="net_pay" />
-                <ScalarProperty Name="gross_pay" ColumnName="gross_pay" />
-                <ScalarProperty Name="payroll_registry_descr" ColumnName="payroll_registry_descr" />
-                <ScalarProperty Name="docmnt_type_source" ColumnName="docmnt_type_source" />
-                <ScalarProperty Name="data_mode" ColumnName="data_mode" />
-                <ScalarProperty Name="with_data_link" ColumnName="with_data_link" />
-                <ScalarProperty Name="new_row_flag" ColumnName="new_row_flag" />
-                <ScalarProperty Name="required_doc_type" ColumnName="required_doc_type" />
-                <ScalarProperty Name="required_doc" ColumnName="required_doc" />
-                <ScalarProperty Name="vlt_dept_code" ColumnName="vlt_dept_code" />
-                <ScalarProperty Name="document_status_descr" ColumnName="document_status_descr" />
-                <ScalarProperty Name="document_status" ColumnName="document_status" />
-                <ScalarProperty Name="doc_pto_nbr" ColumnName="doc_pto_nbr" />
-                <ScalarProperty Name="doc_voucher_nbr" ColumnName="doc_voucher_nbr" />
-                <ScalarProperty Name="doc_cafoa" ColumnName="doc_cafoa" />
-                <ScalarProperty Name="doc_pbo_nbr" ColumnName="doc_pbo_nbr" />
-                <ScalarProperty Name="doc_fund_subcode" ColumnName="doc_fund_subcode" />
-                <ScalarProperty Name="doc_remarks" ColumnName="doc_remarks" />
-                <ScalarProperty Name="doc_dttm" ColumnName="doc_dttm" />
-                <ScalarProperty Name="docmnt_type" ColumnName="docmnt_type" />
-                <ScalarProperty Name="department_code" ColumnName="department_code" />
-                <ScalarProperty Name="route_seq" ColumnName="route_seq" />
-                <ScalarProperty Name="doc_ctrl_nbr" ColumnName="doc_ctrl_nbr" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="sp_edocument_trk_release_V2_route" FunctionName="HRIS_TRKModel.Store.sp_edocument_trk_release_V2_route">
             <ResultMapping>
               <ComplexTypeMapping TypeName="HRIS_TRKModel.sp_edocument_trk_release_V2_route_Result">
@@ -5816,6 +5783,7 @@ warning 6002: The table/view 'HRIS_TRK.dbo.vw_payrollregistry_info2_HRIS_TRK' do
           <EntitySetMapping Name="leave_routes">
             <EntityTypeMapping TypeName="HRIS_TRKModel.leave_routes">
               <MappingFragment StoreEntitySet="leave_routes">
+                <ScalarProperty Name="routing_level" ColumnName="routing_level" />
                 <ScalarProperty Name="route_short_descr" ColumnName="route_short_descr" />
                 <ScalarProperty Name="updated_dttm" ColumnName="updated_dttm" />
                 <ScalarProperty Name="updated_by" ColumnName="updated_by" />
@@ -5850,6 +5818,39 @@ warning 6002: The table/view 'HRIS_TRK.dbo.vw_payrollregistry_info2_HRIS_TRK' do
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_set_remarks_leave_tracking" FunctionName="HRIS_TRKModel.Store.sp_set_remarks_leave_tracking" />
+          <EntitySetMapping Name="vw_edocument_trk_tbl_tobe_release">
+            <EntityTypeMapping TypeName="HRIS_TRKModel.vw_edocument_trk_tbl_tobe_release">
+              <MappingFragment StoreEntitySet="vw_edocument_trk_tbl_tobe_release">
+                <ScalarProperty Name="payrolltemplate_descr" ColumnName="payrolltemplate_descr" />
+                <ScalarProperty Name="payroll_month" ColumnName="payroll_month" />
+                <ScalarProperty Name="payroll_year" ColumnName="payroll_year" />
+                <ScalarProperty Name="payrolltemplate_code" ColumnName="payrolltemplate_code" />
+                <ScalarProperty Name="net_pay" ColumnName="net_pay" />
+                <ScalarProperty Name="gross_pay" ColumnName="gross_pay" />
+                <ScalarProperty Name="payroll_registry_descr" ColumnName="payroll_registry_descr" />
+                <ScalarProperty Name="docmnt_type_source" ColumnName="docmnt_type_source" />
+                <ScalarProperty Name="data_mode" ColumnName="data_mode" />
+                <ScalarProperty Name="with_data_link" ColumnName="with_data_link" />
+                <ScalarProperty Name="new_row_flag" ColumnName="new_row_flag" />
+                <ScalarProperty Name="required_doc_type" ColumnName="required_doc_type" />
+                <ScalarProperty Name="required_doc" ColumnName="required_doc" />
+                <ScalarProperty Name="vlt_dept_code" ColumnName="vlt_dept_code" />
+                <ScalarProperty Name="document_status_descr" ColumnName="document_status_descr" />
+                <ScalarProperty Name="document_status" ColumnName="document_status" />
+                <ScalarProperty Name="doc_pto_nbr" ColumnName="doc_pto_nbr" />
+                <ScalarProperty Name="doc_voucher_nbr" ColumnName="doc_voucher_nbr" />
+                <ScalarProperty Name="doc_cafoa" ColumnName="doc_cafoa" />
+                <ScalarProperty Name="doc_pbo_nbr" ColumnName="doc_pbo_nbr" />
+                <ScalarProperty Name="doc_fund_subcode" ColumnName="doc_fund_subcode" />
+                <ScalarProperty Name="doc_remarks" ColumnName="doc_remarks" />
+                <ScalarProperty Name="doc_dttm" ColumnName="doc_dttm" />
+                <ScalarProperty Name="docmnt_type" ColumnName="docmnt_type" />
+                <ScalarProperty Name="department_code" ColumnName="department_code" />
+                <ScalarProperty Name="route_seq" ColumnName="route_seq" />
+                <ScalarProperty Name="doc_ctrl_nbr" ColumnName="doc_ctrl_nbr" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

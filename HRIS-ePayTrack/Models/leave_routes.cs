@@ -22,5 +22,6 @@ namespace HRIS_ePayTrack.Models
         public string updated_by { get; set; }
         public Nullable<System.DateTime> updated_dttm { get; set; }
         public string route_short_descr { get; set; }
+        public int routing_level { get; set; }
     }
 }

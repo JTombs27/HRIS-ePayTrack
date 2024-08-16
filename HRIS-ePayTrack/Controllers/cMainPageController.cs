@@ -61,7 +61,7 @@ namespace HRIS_ePayTrack.Controllers
                 var dept                = Session["department_code"].ToString();
                 if (lv_user != null)
                 {
-                    my_leave_dep = lv_user.route_code + "-" + lv_user.route_level;
+                    my_leave_dep            = lv_user.route_code;
                     Session["my_leave_dep"] = my_leave_dep;
                 }
                 if (paytrk_auth != "VW-ONL" && lv_user != null)
@@ -70,8 +70,8 @@ namespace HRIS_ePayTrack.Controllers
                     Session["leave_route_code"]         = lv_user.route_code.ToString();
                     Session["route_level"]              = lv_user.route_level;
 
-                    var ToReceive       = db.vw_edocument_trk_tbl_2be_rcvd.Where(a => a.department_code == dept || a.department_code == my_leave_dep || (a.department_code.Substring(2,(a.department_code.Length-1)) == my_leave_dep && a.docmnt_type == "LV")).ToList();
-                    var ToRelease       = db.vw_edocument_trk_tbl_tobe_release.Where(a => a.department_code == dept || a.department_code == my_leave_dep || (a.department_code.Substring(2, (a.department_code.Length - 1)) == my_leave_dep && a.docmnt_type == "LV")).ToList();
+                    var ToReceive       = "";// db.vw_edocument_trk_tbl_2be_rcvd.Where(       a => (a.department_code == dept && a.docmnt_type != "LV") || (a.department_code == my_leave_dep && a.docmnt_type == "LV")).ToList();
+                    var ToRelease       = ""; //db.vw_edocument_trk_tbl_tobe_release.Where(   a => (a.department_code == dept && a.docmnt_type != "LV") || (a.department_code == my_leave_dep && a.docmnt_type == "LV")).ToList();
                     var DocType         = db.document_type_tbl_list().ToList();
                     var departmentnames = db.vw_department_tbl_list_TRK.ToList();
                     var docfundcode     = db.vw_cashadv_fund_sub_tbl_TRK;
@@ -87,9 +87,9 @@ namespace HRIS_ePayTrack.Controllers
                     Session["leave_route_code"] = lv_user.route_code.ToString();
                     Session["route_level"] = lv_user.route_level;
 
-                    var ToReceive = db.vw_edocument_trk_tbl_2be_rcvd.Where(a=> a.docmnt_type == "LV" && a.department_code == my_leave_dep).ToList();
-                    var ToRelease = db.vw_edocument_trk_tbl_tobe_release.Where(a =>  a.docmnt_type == "LV" && a.department_code == my_leave_dep).ToList();
-                    var DocType = db.document_type_tbl_list().ToList();
+                    var ToReceive = "";//db.vw_edocument_trk_tbl_2be_rcvd.Where(a=> a.docmnt_type == "LV" && a.department_code == my_leave_dep).ToList();
+                    var ToRelease = "";//db.vw_edocument_trk_tbl_tobe_release.Where(a =>  a.docmnt_type == "LV" && a.department_code == my_leave_dep).ToList();
+                    var DocType   = db.document_type_tbl_list().ToList();
                     var departmentnames = db.vw_department_tbl_list_TRK.ToList();
                     var docfundcode = db.vw_cashadv_fund_sub_tbl_TRK;
                     var doc_link = db.vw_document_tracking_link_tbl.ToList();
@@ -100,8 +100,8 @@ namespace HRIS_ePayTrack.Controllers
                 }
                 else
                 {
-                    var ToReceive = db.vw_edocument_trk_tbl_2be_rcvd.Where(a => a.department_code == dept && a.docmnt_type != "LV").ToList();
-                    var ToRelease = db.vw_edocument_trk_tbl_tobe_release.Where(a => a.department_code == dept && a.docmnt_type != "LV").ToList();
+                    var ToReceive = ""; //db.vw_edocument_trk_tbl_2be_rcvd.Where(a => a.department_code == dept && a.docmnt_type != "LV").ToList();
+                    var ToRelease = ""; //db.vw_edocument_trk_tbl_tobe_release.Where(a => a.department_code == dept && a.docmnt_type != "LV").ToList();
                     var DocType = db.document_type_tbl_list().ToList();
                     var departmentnames = db.vw_department_tbl_list_TRK.ToList();
                     var docfundcode = db.vw_cashadv_fund_sub_tbl_TRK;
@@ -277,12 +277,12 @@ namespace HRIS_ePayTrack.Controllers
                     edocument_trk_tbl doc   = new edocument_trk_tbl();
                     doc.doc_ctrl_nbr        = det.doc_ctrl_nbr;
                     doc.route_seq           = (int)det.route_seq;
-                    doc.department_code     = (det.doc_ctrl_nbr.Substring(0,3) == "LV-" ?  Session["route_level"].ToString():dept.ToString());
+                    doc.department_code     = (det.doc_ctrl_nbr.Substring(0,3) == "LV-" ?  Session["leave_route_code"].ToString():dept.ToString());
                     doc.vlt_dept_code       = routTo;
-                    doc.doc_dttm            = DateTime.Now;//Convert.ToDateTime(dtm);
+                    doc.doc_dttm            = Convert.ToDateTime(dtm); //DateTime.Now;
                     doc.doc_user_id         = userid;
-                    doc.doc_remarks = "";//dt.remarks;
-                    doc.document_status = doc_status;
+                    doc.doc_remarks         = dt.remarks;
+                    doc.document_status     = doc_status;
                     db.edocument_trk_tbl.Add(doc);
                      db.SaveChanges();
                     //If Count Updated By: Joseph M. Tombo Jr. 12-15-2020
@@ -955,8 +955,8 @@ namespace HRIS_ePayTrack.Controllers
                 //var ToReceive = db.vw_edocument_trk_tbl_2be_rcvd.Where(a => a.department_code == dept).ToList();
                 //var ToRelease = db.vw_edocument_trk_tbl_2be_rlsd.Where(a => a.department_code == dept).ToList();
                 string my_leave_dep = Session["my_leave_dep"].ToString();
-                var ToReceive       = db.vw_edocument_trk_tbl_2be_rcvd.Where(a => a.doc_ctrl_nbr == doc_ctrl_nbr &&  (a.department_code == dept || a.department_code == my_leave_dep || (a.department_code.Substring(2, (a.department_code.Length - 1)) == my_leave_dep && a.docmnt_type == "LV")) ).FirstOrDefault();
-                var ToRelease       = db.vw_edocument_trk_tbl_tobe_release.Where(a => a.doc_ctrl_nbr == doc_ctrl_nbr && (a.department_code == dept || a.department_code == my_leave_dep || (a.department_code.Substring(2, (a.department_code.Length - 1)) == my_leave_dep && a.docmnt_type == "LV"))).FirstOrDefault();
+                var ToReceive       = db.vw_edocument_trk_tbl_2be_rcvd.Where(     a =>  ( a.doc_ctrl_nbr == doc_ctrl_nbr && a.department_code == dept && a.docmnt_type != "LV") || (a.doc_ctrl_nbr == doc_ctrl_nbr && a.department_code == my_leave_dep && a.docmnt_type == "LV")).FirstOrDefault();
+                var ToRelease       = db.vw_edocument_trk_tbl_tobe_release.Where(a =>   ( a.doc_ctrl_nbr == doc_ctrl_nbr && a.department_code == dept && a.docmnt_type != "LV") || (a.doc_ctrl_nbr == doc_ctrl_nbr && a.department_code == my_leave_dep && a.docmnt_type == "LV")).FirstOrDefault();
 
                 var leave_details   = db.sp_get_leave_transmittal_attachment(doc_ctrl_nbr, Session["user_id"].ToString()).ToList();
                 //UPDATED BY JOSEPH
@@ -1153,7 +1153,7 @@ namespace HRIS_ePayTrack.Controllers
             var message = "";
             try
             {
-                var reportlist  = db.sp_payrollregistry_cafao_rep(par_payroll_year, par_payroll_registry_nbr, par_payrolltemplate_code).ToList().FirstOrDefault();
+                var reportlist  = db.sp_payrollregistry_cafao_rep_new(par_payroll_year, par_payroll_registry_nbr, par_payrolltemplate_code).ToList().FirstOrDefault();
                 // Execute Report for Trigger to Insert to sp_cafao_dtl_tbl_list
                 var data    = db.sp_cafao_dtl_tbl_list(par_payroll_year, par_payroll_registry_nbr).ToList();
                 message     = "Success";

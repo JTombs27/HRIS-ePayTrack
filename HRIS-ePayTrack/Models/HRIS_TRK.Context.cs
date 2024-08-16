@@ -62,9 +62,9 @@ namespace HRIS_ePayTrack.Models
         public virtual DbSet<vw_document_tracking_tbl_2be_rlsd_cr> vw_document_tracking_tbl_2be_rlsd_cr { get; set; }
         public virtual DbSet<cafao_dtl_tbl> cafao_dtl_tbl { get; set; }
         public virtual DbSet<vw_edocument_trk_tbl_2be_rlsd> vw_edocument_trk_tbl_2be_rlsd { get; set; }
-        public virtual DbSet<vw_edocument_trk_tbl_tobe_release> vw_edocument_trk_tbl_tobe_release { get; set; }
         public virtual DbSet<leave_route_users> leave_route_users { get; set; }
         public virtual DbSet<leave_routes> leave_routes { get; set; }
+        public virtual DbSet<vw_edocument_trk_tbl_tobe_release> vw_edocument_trk_tbl_tobe_release { get; set; }
     
         public virtual ObjectResult<document_type_tbl_list_Result> document_type_tbl_list()
         {

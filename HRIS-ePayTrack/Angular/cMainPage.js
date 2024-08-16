@@ -827,8 +827,8 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
                 paytrk_authority(s.paytrk_auth)
 
                 //UPDATED BY JOSEPH....
-                s.ToRecieve_Data = d.data.ToReceive.refreshTable('ToRecieve_Table', '');
-                s.ToRelease_Data = d.data.ToRelease.refreshTable('ToRelease_Table', '');
+                //s.ToRecieve_Data = d.data.ToReceive.refreshTable('ToRecieve_Table', '');
+                //s.ToRelease_Data = d.data.ToRelease.refreshTable('ToRelease_Table', '');
 
               
                 //s.ToRecieve_Table.columns.adjust().draw();
