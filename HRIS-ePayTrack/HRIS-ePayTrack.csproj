@@ -161,6 +161,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Content\App_Start\BundleConfig.cs" />
     <Compile Include="Content\App_Start\FilterConfig.cs" />
     <Compile Include="Content\App_Start\IdentityConfig.cs" />
@@ -171,6 +172,7 @@
     <Compile Include="Controllers\cMainPageController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
+    <Compile Include="Controllers\TrackingController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -284,6 +286,9 @@
     <Compile Include="Models\sp_edocument_tk_2be_release_new_Result.cs">
       <DependentUpon>HRIS_TRK.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\sp_edocument_tobe_receive_list_Result.cs">
+      <DependentUpon>HRIS_TRK.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\sp_edocument_trk_correct_2_route_Result.cs">
       <DependentUpon>HRIS_TRK.tt</DependentUpon>
     </Compile>
@@ -297,6 +302,9 @@
       <DependentUpon>HRIS_TRK.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sp_edocument_trk_return_2_route_Result.cs">
+      <DependentUpon>HRIS_TRK.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_edocument_trk_scan_tracking_V2026_Result.cs">
       <DependentUpon>HRIS_TRK.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sp_edocument_trk_tbl_CA_ADA_link_list_Result.cs">
@@ -408,6 +416,9 @@
       <DependentUpon>HRIS_TRK.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\vw_document_tracking_tbl_2be_rlsd_oth.cs">
+      <DependentUpon>HRIS_TRK.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\vw_edocument_phrmod_toberelease.cs">
       <DependentUpon>HRIS_TRK.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\vw_edocument_trk_tbl_2be_rcvd.cs">
@@ -820,6 +831,7 @@
     <Content Include="Angular\ng-Login.js" />
     <Content Include="Angular\ng-Reports.js" />
     <Content Include="Angular\ng-SharedLayout.js" />
+    <Content Include="Angular\ng-Tracking.js" />
     <Content Include="Angular\ngAnimate.js" />
     <Content Include="Angular\ngApp.js" />
     <Content Include="Content\angular-smart-table\dist\smart-table.js" />
@@ -912,6 +924,7 @@
     <Content Include="Content\plugins\images\bootstrap-colorpicker\hue-horizontal.png" />
     <Content Include="Content\plugins\images\bootstrap-colorpicker\hue.png" />
     <Content Include="Content\plugins\images\bootstrap-colorpicker\saturation.png" />
+    <Content Include="Content\plugins\images\sort_asc.png" />
     <Content Include="Content\plugins\images\sprite-skin-flat.png" />
     <Content Include="Content\plugins\images\spritemap%402x.png" />
     <Content Include="Content\plugins\images\spritemap.png" />
@@ -1740,9 +1753,11 @@
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\cMainPage\Index.cshtml" />
     <Content Include="Views\Reports\Index.cshtml" />
+    <Content Include="Views\Tracking\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Session\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

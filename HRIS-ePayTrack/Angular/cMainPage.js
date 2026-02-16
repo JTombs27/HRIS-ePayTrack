@@ -8,56 +8,57 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
     var h                       = $http
     var cs = commonScript
 
-    s.department_cafoa = "";
-    s.LV = ""
-    s.rel_rec_ret = ""
-    s.rel_rec_ret_hist = ""
-    s.docs_type = ""
-    s.list_type = "V"
-    s.doc_ctrl_nbr = ""
-    s.D = {}
-    s.exec_block = false
-    s.doc_nbr_lbl = "Document Number"
-    s.department                = true;
-    s.data_vl                   = []
-    s.actionfield               = "";
-    s.detail                    = false
-    s.collapseIn1 = ""
-    s.a_flag = ""
-    s.sys_date = ""
-    s.innertext1 = ""
-    s.innertext2 = ""
-    s.warningInfoText = ""
-    s.doc_nbr_list = []
-    s.year = []
-    s.document_tracking_link_tbl = []
-    s.document_transmittal_tbl = []
-    s.document_transmittal_dtl_tbl = []
-    s.to_return_route =  []
-    s.to_release_route = []
-    s.data_correct = {}
-    s.ddl_reports = ""
-    s.hs = {}
+    s.department_cafoa  = "";
+    s.LV                = "";
+    s.rel_rec_ret       = "";
+    s.rel_rec_ret_hist  = "";
+    s.docs_type         = "";
+    s.list_type         = "V";
+    s.doc_ctrl_nbr      = "";
+    s.D                 = {};
+    s.exec_block        = false;
+    s.doc_nbr_lbl       = "Document Number";
+    s.department        = true;
+    s.data_vl           = [];
+    s.actionfield       = "";
+    s.detail            = false;
+    s.collapseIn1       = "";
+    s.a_flag            = "";
+    s.sys_date          = "";
+    s.innertext1        = "";
+    s.innertext2        = "";
+    s.warningInfoText   = "";
+    s.doc_nbr_list      = [];
+    s.year              = [];
+    s.document_tracking_link_tbl    = [];
+    s.document_transmittal_tbl      = [];
+    s.document_transmittal_dtl_tbl  = [];
+    s.to_return_route   = [];
+    s.to_release_route  = [];
+    s.data_correct      = {};
+    s.ddl_reports       = "";
+    s.hs                = {};
     s.itd = {
         it_doc_date: "",
         it_from_name: "",
-        it_from_off_pos:""
-    }
+        it_from_off_pos: ""
+    };
     //added By Joseph
     s.lv_detail = [];
 
-    s.transmittal_tbl = null
-    s.di = {}
-    s.ds = {}
-    s.required_doc_type = ""
-    s.change_date = false;
-    s.save_itcd_doc = false
-    s.it_ctrl_nbr_found = false
-    s.temp_date_serv = ""
-    s.temp_date_front = ""
-    s.departmentname = ""
-    s.route_control_nbr = 0
-    s.var_data_mode = ""
+    s.transmittal_tbl   = null;
+    s.di                = {}
+    s.ds                = {}
+    s.required_doc_type = "";
+    s.change_date       = false;
+    s.save_itcd_doc     = false;
+    s.it_ctrl_nbr_found = false;
+    s.temp_date_serv    = "";
+    s.temp_date_front   = "";
+    s.departmentname    = "";
+    s.route_control_nbr = 0;
+    s.var_data_mode     = "";
+    s.btn_trans_return  = true;
     //s.allow_release = false;
     //s.allow_return = false;
     //hide show elements
@@ -3578,20 +3579,29 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
 
                 $("#lbl_transmittal").addClass("hidden")
 
-                $("#transmittal_date").val(moment(dtl_transmittal[0].transmittal_date).format("YYYY-MM-DD"))
-                s.transmittal_date = moment(dtl_transmittal[0].transmittal_date).format("YYYY-MM-DD")
-                $("#transmittal_dept_name").val(dtl_transmittal[0].department_name1)
-                s.transmittal_dept_name = dtl_transmittal[0].department_name1
-                s.transmittal_requested_by = dtl_transmittal[0].employee_name
-                $("#transmittal_requested_by").val(dtl_transmittal[0].employee_name)
+                $("#transmittal_date").val(moment(dtl_transmittal[0].transmittal_date).format("YYYY-MM-DD"));
+                s.transmittal_date          = moment(dtl_transmittal[0].transmittal_date).format("YYYY-MM-DD");
+                $("#transmittal_dept_name").val(dtl_transmittal[0].department_name1);
+                s.transmittal_dept_name     = dtl_transmittal[0].department_name1;
+                s.transmittal_requested_by  = dtl_transmittal[0].employee_name;
+                $("#transmittal_requested_by").val(dtl_transmittal[0].employee_name);
 
 
                 h.post("../cMainPage/Retrieve_TransmittalDetails",
                     {
                         par_transmittal_nbr: dtl_transmittal[0].transmittal_nbr
                     }).then(function (d) {
-                        if (d.data.message == "Success") {
-                            $("#btn_transmittal_btn").removeClass("hidden")
+                        if (d.data.message == "Success")
+                        {
+                            if (dtl_transmittal[0].approval_status == "T") {
+                                $("#btn_transmittal_btn").addClass("hidden")
+                                s.btn_trans_return = false;
+                            }
+                            else
+                            {
+                                s.btn_trans_return = true;
+                                $("#btn_transmittal_btn").removeClass("hidden")
+                            }
                             if (d.data.sp_dtr_transmittal_dtl_tbl_list_ATS.length > 0) {
 
                                 s.transmittal_tbl.fnClearTable();
@@ -3625,12 +3635,6 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
                 s.innertext1 = "Transmittal control number not found!"
                 $("#btn_transmittal_btn").addClass("hidden")
             }
-
-
-            
-
-           
-
         }
     }
 
@@ -3640,9 +3644,21 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
         h.post("../cMainPage/UpdateTransmittalStatus",
             {
                 par_transmittal_nbr: $("#transmittal_ctrl_nbr").val()
-            }).then(function (d) {
-                if (d.data.message == "success") {
-                    swal("Successfully Received!", { icon: "success", });
+            }).then(function (d)
+            {
+                if (d.data.message == "success")
+                {
+                    var transmittal_data = s.document_transmittal_tbl.filter(function (d) {
+                        return d.transmittal_nbr == $("#transmittal_ctrl_nbr").val()
+                    })
+                    if (transmittal_data[0].approval_status == "T")
+                    {
+                        swal("Successfully Returned!", { icon: "success", });
+                    }
+                    else {
+                        swal("Successfully Received!", { icon: "success", });
+                    }
+                   
 
                     s.document_transmittal_tbl = s.document_transmittal_tbl.remove($("#transmittal_ctrl_nbr").val(), "transmittal_nbr");
                     $("#transmittal_ctrl_nbr").val("")

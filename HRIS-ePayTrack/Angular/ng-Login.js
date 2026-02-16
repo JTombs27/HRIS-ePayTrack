@@ -11,7 +11,7 @@ ng_ePayTrack_App.controller("LoginCtrlr", function ($scope, $http, $filter) {
             console.log(d.data.isLogin)
             if (d.data.isLogin == 1)
             {
-                location.href = "../cMainPage/Index"
+                location.href = "../Tracking/Index"
             }
         })
     }
@@ -61,7 +61,7 @@ ng_ePayTrack_App.controller("LoginCtrlr", function ($scope, $http, $filter) {
                          else
                          {
                         
-                             location.href = "../cMainPage/Index"
+                             location.href = "../Tracking/Index"
                          }
                     }
                     

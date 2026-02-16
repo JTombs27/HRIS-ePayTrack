@@ -10,17 +10,16 @@
 namespace HRIS_ePayTrack.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class leave_route_users
+    public partial class sp_edocument_tobe_receive_list_Result
     {
-        public string route_code { get; set; }
-        public string route_level { get; set; }
-        public string route_user_id { get; set; }
-        public string created_by { get; set; }
-        public System.DateTime created_dttm { get; set; }
-        public string updated_by { get; set; }
-        public Nullable<System.DateTime> updated_dttm { get; set; }
+        public string doc_ctrl_nbr { get; set; }
+        public int route_seq { get; set; }
         public string department_code { get; set; }
+        public string vlt_dept_code { get; set; }
+        public System.DateTime doc_dttm { get; set; }
+        public string doc_remarks { get; set; }
+        public string document_status { get; set; }
+        public string doc_user_id { get; set; }
     }
 }

@@ -17,5 +17,11 @@ namespace HRIS_ePayTrack
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+
+        protected void Session_End(object sender, EventArgs e)
+        {
+            // Optional logging
+        }
+
     }
 }

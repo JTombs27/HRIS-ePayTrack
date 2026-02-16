@@ -1,0 +1,271 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Angular/ng-Tracking.js"></script>
+<div id="page-wrapper" class="gray-bg" ng-app="ng_ePayTrack_App" ng-controller="cTrackingCtrlr">
+    <div class="wrapper wrapper-content  animated fadeInRight" style="padding-top:10px;">
+        <div class="row">
+            <div class="col-sm-8 white-bg" style="padding:15px;border-radius:10px !important;">
+                <div class="row">
+                    <div class="col-lg-2" style="padding-bottom:10px !important;padding-right:2px !important;">
+                        <button class="btn btn-primary btn-block" ng-click="btn_showReceive_modal()">
+                            <i class="receivedtr fa fa-th-large"></i> RECEIVE DOCUMENTS
+                        </button>
+                    </div>
+                    <div class="col-lg-2 no-padding" style="padding-bottom:10px !important;padding-right:2px !important;">
+                        <button class="btn btn-success btn-block" ng-click="btn_view_docs()" style="margin-right: 0px;">
+                            <i class="scndocctrlnbr fa fa-share"></i> RELEASE DOCUMENTS
+                        </button>
+                    </div>
+                    <div class="col-lg-6"></div>
+                    <div class="col-lg-2" style="padding-bottom:10px !important;">
+                        <button class="btn btn-warning btn-block" ng-click="receiveDTR()">
+                            <i class="receivedtr fa fa-barcode"></i> RECEIVE DTR
+                        </button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <input type="text" placeholder="Search client " class="input form-control">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn btn-primary"> <i class="fa fa-search"></i> Search</button>
+                    </span>
+                </div>
+                <div class="clients-list">
+                    <ul class="nav nav-tabs">
+                        <span class="pull-right small text-muted">1406 Elements</span>
+                        <li class="active"><a data-toggle="tab" href="#tab-1"><i class="fa fa-user"></i> To be Receive</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-2"><i class="fa fa-briefcase"></i> To be Release</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tab-1" class="tab-pane active">
+                            <div class="full-height-scroll">
+                                <div class="table-responsive">
+                                    <table id="torecieve" class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:5% !important;  height:30px;padding-top:10px;"></th>
+                                                <th style="width:20% !important; height:30px;padding-top:10px;">DOC. CTRL NBR</th>
+                                                <th style="width:65% !important; height:30px;padding-top:10px;">DESCRIPTION</th>
+                                                <th style="width:10% !important; height:30px;padding-top:10px;">ACTIONS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tab-2" class="tab-pane">
+                            <div class="full-height-scroll">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover">
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="tab-content">
+                    <div id="contact-1" class="tab-pane active">
+                        <div class="row m-b-lg">
+                            <div class="col-lg-4 text-center">
+                                <h2>Nicki Smith</h2>
+
+                                <div class="m-b-sm">
+                                    @*<img alt="image" class="img-circle" src="img/a2.jpg"
+                                    style="width: 62px">*@
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <strong>
+                                    About me
+                                </strong>
+
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                    tempor incididunt ut labore et dolore magna aliqua.
+                                </p>
+                                <button type="button" class="btn btn-primary btn-sm btn-block">
+                                    <i class="fa fa-envelope"></i> Send Message
+                                </button>
+                            </div>
+                        </div>
+                        <div class="client-detail">
+                            <div class="full-height-scroll">
+
+                                <strong>Last activity</strong>
+
+                                <ul class="list-group clear-list">
+                                    <li class="list-group-item fist-item">
+                                        <span class="pull-right"> 09:00 pm </span>
+                                        Please contact me
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span class="pull-right"> 10:16 am </span>
+                                        Sign a contract
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span class="pull-right"> 08:22 pm </span>
+                                        Open new shop
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span class="pull-right"> 11:06 pm </span>
+                                        Call back to Sylvia
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span class="pull-right"> 12:00 am </span>
+                                        Write a letter to Sandra
+                                    </li>
+                                </ul>
+                                <strong>Notes</strong>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                    tempor incididunt ut labore et dolore magna aliqua.
+                                </p>
+                                <hr />
+                                <strong>Timeline activity</strong>
+                                <div id="vertical-timeline" class="vertical-container dark-timeline">
+                                    <div class="vertical-timeline-block">
+                                        <div class="vertical-timeline-icon gray-bg">
+                                            <i class="fa fa-coffee"></i>
+                                        </div>
+                                        <div class="vertical-timeline-content">
+                                            <p>
+                                                Conference on the sales results for the previous year.
+                                            </p>
+                                            <span class="vertical-date small text-muted"> 2:10 pm - 12.06.2014 </span>
+                                        </div>
+                                    </div>
+                                    <div class="vertical-timeline-block">
+                                        <div class="vertical-timeline-icon gray-bg">
+                                            <i class="fa fa-briefcase"></i>
+                                        </div>
+                                        <div class="vertical-timeline-content">
+                                            <p>
+                                                Many desktop publishing packages and web page editors now use Lorem.
+                                            </p>
+                                            <span class="vertical-date small text-muted"> 4:20 pm - 10.05.2014 </span>
+                                        </div>
+                                    </div>
+                                    <div class="vertical-timeline-block">
+                                        <div class="vertical-timeline-icon gray-bg">
+                                            <i class="fa fa-bolt"></i>
+                                        </div>
+                                        <div class="vertical-timeline-content">
+                                            <p>
+                                                There are many variations of passages of Lorem Ipsum available.
+                                            </p>
+                                            <span class="vertical-date small text-muted"> 06:10 pm - 11.03.2014 </span>
+                                        </div>
+                                    </div>
+                                    <div class="vertical-timeline-block">
+                                        <div class="vertical-timeline-icon navy-bg">
+                                            <i class="fa fa-warning"></i>
+                                        </div>
+                                        <div class="vertical-timeline-content">
+                                            <p>
+                                                The generated Lorem Ipsum is therefore.
+                                            </p>
+                                            <span class="vertical-date small text-muted"> 02:50 pm - 03.10.2014 </span>
+                                        </div>
+                                    </div>
+                                    <div class="vertical-timeline-block">
+                                        <div class="vertical-timeline-icon gray-bg">
+                                            <i class="fa fa-coffee"></i>
+                                        </div>
+                                        <div class="vertical-timeline-content">
+                                            <p>
+                                                Conference on the sales results for the previous year.
+                                            </p>
+                                            <span class="vertical-date small text-muted"> 2:10 pm - 12.06.2014 </span>
+                                        </div>
+                                    </div>
+                                    <div class="vertical-timeline-block">
+                                        <div class="vertical-timeline-icon gray-bg">
+                                            <i class="fa fa-briefcase"></i>
+                                        </div>
+                                        <div class="vertical-timeline-content">
+                                            <p>
+                                                Many desktop publishing packages and web page editors now use Lorem.
+                                            </p>
+                                            <span class="vertical-date small text-muted"> 4:20 pm - 10.05.2014 </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="modal_receive" tabindex="-1" role="dialog" aria-labelledby="modalLabelSmall" aria-hidden="true" style="overflow-y:scroll !important">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content modal-content-add-edit">
+                    <div class="modal-header bg-primary">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <div class="form-group row" style="margin-bottom:5px;">
+                            <h2 class="col-lg-12 text-center text-white" style="margin-top:0px;margin-bottom:2px;line-height: 0.7;">
+                                <b>RECEIVE DOCUMENT</b>
+                                <br />
+                                <small class="text-info text-center" style="font-size:12px"> <b> <i class="fa fa-info-circle"></i> Scan the document or input the document control number   </b></small>
+                            </h2>
+                            <div class="col-lg-12 text-center" style="padding:5px 35px;">
+                                <span style="position:absolute;float:right;right:5%;padding-top:2px;color:dimgrey;font-size:35px"> <i class="fa fa-qrcode"></i> <i class="fa fa-barcode"></i></span>
+                                <input type="text" class="form-control text-center f-Border" autofocus style="height:50px;font-size:29px;color:darkslategray;letter-spacing: 0.154em;padding-right:80px" ng-model="doc_ctrl_nbr" maxlength="15" ng-change="scan_doc_ctrl_nbr('receive',doc_ctrl_nbr)" ng-model-options="{ debounce: 300 }"  id="doc_ctrl_nbr">
+                            </div>
+                            <small id="barcode_notfound" class="col-lg-12 text-info text-center hidden" style="font-size:12px;height:15px;color:red"> <b> <i class="fa fa-info-circle"></i> Document control number not found!</b></small>
+                        </div>
+                    </div>
+                    <div class="modal-body with-background" style="padding:10px;">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="panel-body " style="padding-bottom:0px">
+                                                <div class="panel-body with-background modal-content-add-edit">
+                                                    <form id="di" ng-model="di">
+                                                        <div class="row form-group">
+                                                            <span class="col-lg-3 font-bold ">Description : </span>
+                                                            <div class="col-lg-9" style="margin-bottom:3px">
+                                                                <input type="text" class="form-control f-Border" id="payroll_registry_descr" ng-model="payroll_registry_descr" disabled>
+                                                                <small class="col-lg-12 text-info text-right payroll_registry_descr hidden" style="font-size:12px;height:15px;color:red">  <i class="fa fa-info-circle"></i>Required field! </small>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row form-group">
+                                                            <span class="col-lg-3  font-bold">Remarks: </span>
+
+                                                            <div class="col-lg-9" style="margin-bottom:3px">
+                                                                <textarea class="form-control f-Border" id="remarks" ng-disabled="true" ng-model="di.remarks"></textarea>
+                                                                <small class="col-lg-12 text-info text-right remarks hidden" style="font-size:12px;height:15px;color:red">  <i class="fa fa-info-circle"></i>Required field! </small>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" id="btn_rcvd" style="padding-bottom:0px !important;">
+                        <button class="btn btn-success dim"  ><i id="rcvd" class="rcvd fa fa-backward"></i> Receive</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById('doc_ctrl_nbr').addEventListener('input', function () {
+        this.value = this.value.toUpperCase();
+    });
+</script>

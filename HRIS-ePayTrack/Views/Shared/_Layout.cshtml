@@ -21,7 +21,7 @@
     <link href="~/Content/plugins/toastr/toastr.min.css" rel="stylesheet">
 
     <!-- Gritter -->
-    <link href="~/Content/plugins/gritter/jquery.gritter.css" rel="stylesheet">
+    @*<link href="~/Content/plugins/gritter/jquery.gritter.css" rel="stylesheet">*@
     <link href="~/Content/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
 
     <link href="~/Content/animate.css" rel="stylesheet">
@@ -52,77 +52,77 @@
     var counter                 = "";
 
     //detect mouse click then call reset session time function
-    function mouse_detect(event) {
-        reset_session();
-    }
+    //function mouse_detect(event) {
+    //    reset_session();
+    //}
 
-    //detect mouse scroll then call reset session time function
-    function wheel_detect() {
-        reset_session();
-    }
+    ////detect mouse scroll then call reset session time function
+    ////function wheel_detect() {
+    ////    reset_session();
+    ////}
 
-    //start session timer on page load
-    function onload_body() {
-        set_time();
-        timer();
-    }
+    ////start session timer on page load
+    //function onload_body() {
+    //    set_time();
+    //    timer();
+    //}
 
-    function set_time() {
-        set_time_var = setTimeout('session_warning();', sTimeout);
-        counter = setInterval(timer, 1000);
-    }
+    //function set_time() {
+    //    set_time_var = setTimeout('session_warning();', sTimeout);
+    //    counter = setInterval(timer, 1000);
+    //}
 
-    function timer() {
-        count = count - 1;
-        if (count <= 0) {
-            setTimeout(function () {
-                swal({
-                    title: "Session Timeout",
-                    text: "You will be redirected to Login Page.",
-                    icon: "error",
-                    allowOutsideClick: false,
-                })
-                    .then(function () {
-                        clearInterval(counter);
-                        sessionStorage.clear();
-                        location.href = "../Login/Index"
-                        return;
-                    });
-            }, 1000);
-        }
-        $('#time_left').text(count);
-    }
+    //function timer() {
+    //    count = count - 1;
+    //    if (count <= 0) {
+    //        setTimeout(function () {
+    //            swal({
+    //                title: "Session Timeout",
+    //                text: "You will be redirected to Login Page.",
+    //                icon: "error",
+    //                allowOutsideClick: false,
+    //            })
+    //                .then(function () {
+    //                    clearInterval(counter);
+    //                    sessionStorage.clear();
+    //                    location.href = "../Login/Index"
+    //                    return;
+    //                });
+    //        }, 1000);
+    //    }
+    //    $('#time_left').text(count);
+    //}
 
-    function session_warning() {
-        setTimeout(function () {
-            toastr.options = {
-                closeOnHover: true,
-                closeButton: false,
-                progressBar: true,
-                showMethod: 'slideDown',
-                timeOut: 30000
-            };
-            toastr.error('Your session is about to end in ' + sessionTimeoutWarning + ' minutes, try refreshing the page!', 'You have been idle for too long.');
+    //function session_warning() {
+    //    setTimeout(function () {
+    //        toastr.options = {
+    //            closeOnHover: true,
+    //            closeButton: false,
+    //            progressBar: true,
+    //            showMethod: 'slideDown',
+    //            timeOut: 30000
+    //        };
+    //        toastr.error('Your session is about to end in ' + sessionTimeoutWarning + ' minutes, try refreshing the page!', 'You have been idle for too long.');
 
-        }, 1000);
-    }
+    //    }, 1000);
+    //}
 
-    function reset_session() {
-        toastr.clear();
-        var xmlHttp = null;
-        xmlHttp = new XMLHttpRequest();
-        xmlHttp.open("GET", "KeepAlive.aspx", true);
-        xmlHttp.send(null);
+    //function reset_session() {
+    //    toastr.clear();
+    //    var xmlHttp = null;
+    //    xmlHttp = new XMLHttpRequest();
+    //    xmlHttp.open("GET", "KeepAlive.aspx", true);
+    //    xmlHttp.send(null);
 
-        count = sessionTimeout * 60;
-        toast_time_out = 1;
-        clearTimeout(set_time_var);
-        clearInterval(counter);
-        set_time();
-    }
+    //    count = sessionTimeout * 60;
+    //    toast_time_out = 1;
+    //    clearTimeout(set_time_var);
+    //    clearInterval(counter);
+    //    set_time();
+    //}
     </script>
 </head>
-<body class="top-navigation white-bg  with-background" ng-app="ng_ePayTrack_App" ng-controller="SharedLayoutCtrlr" id="main_body" onload="onload_body()" onmousedown="mouse_detect(event)" onwheel="wheel_detect()">
+<body class="top-navigation white-bg  with-background" ng-app="ng_ePayTrack_App" ng-controller="SharedLayoutCtrlr" id="main_body" >
     <div id="" class="white-bg">
 
         <div class="row border-bottom">
@@ -256,6 +256,24 @@
     <script src="~/Scripts/moment.js"></script>
     <script src="~/Scripts/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
     <script>
+
+        let activityTimer;
+
+        function resetSession() 
+        {
+            clearTimeout(activityTimer);
+            activityTimer = setTimeout(() => {
+                fetch('@Url.Action("KeepAlive", "Session")', {
+                    method: 'POST'
+                });
+            }, 6000);
+        }
+
+
+        // Detect user activity
+        ['click', 'mousemove', 'keydown', 'scroll', 'touchstart'].forEach(event => {
+            document.addEventListener(event, resetSession);
+        });
 
         $(document).ready(function () {
           

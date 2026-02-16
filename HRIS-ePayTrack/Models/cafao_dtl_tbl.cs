@@ -26,5 +26,7 @@ namespace HRIS_ePayTrack.Models
         public string updated_by_user { get; set; }
         public Nullable<System.DateTime> created_dttm { get; set; }
         public Nullable<System.DateTime> updated_dttm { get; set; }
+        public Nullable<int> raao_code { get; set; }
+        public Nullable<int> ooe_code { get; set; }
     }
 }

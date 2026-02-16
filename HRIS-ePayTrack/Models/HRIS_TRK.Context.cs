@@ -65,6 +65,7 @@ namespace HRIS_ePayTrack.Models
         public virtual DbSet<leave_route_users> leave_route_users { get; set; }
         public virtual DbSet<leave_routes> leave_routes { get; set; }
         public virtual DbSet<vw_edocument_trk_tbl_tobe_release> vw_edocument_trk_tbl_tobe_release { get; set; }
+        public virtual DbSet<vw_edocument_phrmod_toberelease> vw_edocument_phrmod_toberelease { get; set; }
     
         public virtual ObjectResult<document_type_tbl_list_Result> document_type_tbl_list()
         {
@@ -762,6 +763,36 @@ namespace HRIS_ePayTrack.Models
                 new ObjectParameter("par_user_id", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("sp_set_remarks_leave_tracking", par_doc_ctrl_nbrParameter, par_ledger_ctrl_noParameter, par_remarksParameter, par_user_idParameter);
+        }
+    
+        public virtual ObjectResult<sp_edocument_tobe_receive_list_Result> sp_edocument_tobe_receive_list(string par_department_code)
+        {
+            var par_department_codeParameter = par_department_code != null ?
+                new ObjectParameter("par_department_code", par_department_code) :
+                new ObjectParameter("par_department_code", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_edocument_tobe_receive_list_Result>("sp_edocument_tobe_receive_list", par_department_codeParameter);
+        }
+    
+        public virtual ObjectResult<sp_edocument_trk_scan_tracking_V2026_Result> sp_edocument_trk_scan_tracking_V2026(string par_doc_ctrl_nbr, string par_department_code, string par_scan_action, string par_doc_type)
+        {
+            var par_doc_ctrl_nbrParameter = par_doc_ctrl_nbr != null ?
+                new ObjectParameter("par_doc_ctrl_nbr", par_doc_ctrl_nbr) :
+                new ObjectParameter("par_doc_ctrl_nbr", typeof(string));
+    
+            var par_department_codeParameter = par_department_code != null ?
+                new ObjectParameter("par_department_code", par_department_code) :
+                new ObjectParameter("par_department_code", typeof(string));
+    
+            var par_scan_actionParameter = par_scan_action != null ?
+                new ObjectParameter("par_scan_action", par_scan_action) :
+                new ObjectParameter("par_scan_action", typeof(string));
+    
+            var par_doc_typeParameter = par_doc_type != null ?
+                new ObjectParameter("par_doc_type", par_doc_type) :
+                new ObjectParameter("par_doc_type", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_edocument_trk_scan_tracking_V2026_Result>("sp_edocument_trk_scan_tracking_V2026", par_doc_ctrl_nbrParameter, par_department_codeParameter, par_scan_actionParameter, par_doc_typeParameter);
         }
     }
 }

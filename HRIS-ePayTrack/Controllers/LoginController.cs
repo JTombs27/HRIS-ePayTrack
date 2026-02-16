@@ -20,7 +20,7 @@ namespace HRIS_ePayTrack.Controllers
             dvn.DVName = "(" + db.Database.Connection.DataSource.ToString().Split('\\')[db.Database.Connection.DataSource.ToString().Split('\\').Length - 1] + ")";
             if (Session["user_id"] != null)
             {
-                return RedirectToAction("Index", "cMainPage");
+                return RedirectToAction("Index", "Tracking");
             }
             else
             {

@@ -43,6 +43,7 @@
         <EntityTypeShape EntityType="HRIS_TRKModel.leave_route_users" Width="1.5" PointX="15.375" PointY="8.75" />
         <EntityTypeShape EntityType="HRIS_TRKModel.leave_routes" Width="1.5" PointX="21.375" PointY="7.75" />
         <EntityTypeShape EntityType="HRIS_TRKModel.vw_edocument_trk_tbl_tobe_release" Width="1.5" PointX="21.375" PointY="0.75" />
+        <EntityTypeShape EntityType="HRIS_TRKModel.vw_edocument_phrmod_toberelease" Width="1.5" PointX="21.375" PointY="11.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
