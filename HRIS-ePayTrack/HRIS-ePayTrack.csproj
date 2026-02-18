@@ -334,6 +334,9 @@
     <Compile Include="Models\sp_modules_tbl_list_TRK_Result.cs">
       <DependentUpon>HRIS_TRK.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\sp_payrollcharges_list_Result.cs">
+      <DependentUpon>HRIS_TRK.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\sp_payrollregistry_cafao_rep_new_Result.cs">
       <DependentUpon>HRIS_TRK.tt</DependentUpon>
     </Compile>

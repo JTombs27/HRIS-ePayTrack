@@ -72,19 +72,6 @@ namespace HRIS_ePayTrack.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<document_type_tbl_list_Result>("document_type_tbl_list");
         }
     
-        public virtual ObjectResult<sp_cafao_dtl_tbl_list_Result> sp_cafao_dtl_tbl_list(string par_payroll_year, string par_payroll_registry_nbr)
-        {
-            var par_payroll_yearParameter = par_payroll_year != null ?
-                new ObjectParameter("par_payroll_year", par_payroll_year) :
-                new ObjectParameter("par_payroll_year", typeof(string));
-    
-            var par_payroll_registry_nbrParameter = par_payroll_registry_nbr != null ?
-                new ObjectParameter("par_payroll_registry_nbr", par_payroll_registry_nbr) :
-                new ObjectParameter("par_payroll_registry_nbr", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_cafao_dtl_tbl_list_Result>("sp_cafao_dtl_tbl_list", par_payroll_yearParameter, par_payroll_registry_nbrParameter);
-        }
-    
         public virtual ObjectResult<sp_document_tracking_nbrs_tbl_update_Result> sp_document_tracking_nbrs_tbl_update(string p_doc_ctrl_nbr, string p_doc_fund_subcode, string p_doc_nbr, string p_department_code, Nullable<System.DateTime> p_doc_dttm, string p_doc_user_id)
         {
             var p_doc_ctrl_nbrParameter = p_doc_ctrl_nbr != null ?
@@ -793,6 +780,28 @@ namespace HRIS_ePayTrack.Models
                 new ObjectParameter("par_doc_type", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_edocument_trk_scan_tracking_V2026_Result>("sp_edocument_trk_scan_tracking_V2026", par_doc_ctrl_nbrParameter, par_department_codeParameter, par_scan_actionParameter, par_doc_typeParameter);
+        }
+    
+        public virtual ObjectResult<sp_payrollcharges_list_Result> sp_payrollcharges_list(string par_appropriation_year)
+        {
+            var par_appropriation_yearParameter = par_appropriation_year != null ?
+                new ObjectParameter("par_appropriation_year", par_appropriation_year) :
+                new ObjectParameter("par_appropriation_year", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_payrollcharges_list_Result>("sp_payrollcharges_list", par_appropriation_yearParameter);
+        }
+    
+        public virtual ObjectResult<sp_cafao_dtl_tbl_list_Result> sp_cafao_dtl_tbl_list(string par_payroll_year, string par_payroll_registry_nbr)
+        {
+            var par_payroll_yearParameter = par_payroll_year != null ?
+                new ObjectParameter("par_payroll_year", par_payroll_year) :
+                new ObjectParameter("par_payroll_year", typeof(string));
+    
+            var par_payroll_registry_nbrParameter = par_payroll_registry_nbr != null ?
+                new ObjectParameter("par_payroll_registry_nbr", par_payroll_registry_nbr) :
+                new ObjectParameter("par_payroll_registry_nbr", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_cafao_dtl_tbl_list_Result>("sp_cafao_dtl_tbl_list", par_payroll_yearParameter, par_payroll_registry_nbrParameter);
         }
     }
 }

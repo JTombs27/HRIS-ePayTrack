@@ -25,6 +25,7 @@
           <Property Name="updated_dttm" Type="datetime" />
           <Property Name="raao_code" Type="int" />
           <Property Name="ooe_code" Type="int" />
+          <Property Name="payrolltemplate_code" Type="varchar" MaxLength="3" />
         </EntityType>
         <EntityType Name="document_route_funds_tbl">
           <Key>
@@ -1228,6 +1229,9 @@ warning 6002: The table/view 'HRIS_TRK.dbo.vw_payrollregistry_info2_HRIS_TRK' do
         <Function Name="sp_get_leave_transmittal_attachment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="par_doc_ctrl_nbr" Type="varchar" Mode="In" />
           <Parameter Name="par_tracking_user" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_payrollcharges_list" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="par_appropriation_year" Type="varchar" Mode="In" />
         </Function>
         <Function Name="sp_payrollemployeemaster_tbl_insert_RE_empl_id" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="p_year" Type="varchar" Mode="In" />
@@ -2718,10 +2722,6 @@ warning 6002: The table/view 'HRIS_TRK.dbo.vw_payrollregistry_info2_HRIS_TRK' do
           <EntitySet Name="vw_payrollemployeegroupings_HRIS_TRK" EntityType="Self.vw_payrollemployeegroupings_HRIS_TRK" />
           <EntitySet Name="vw_payrollregistry_info2_HRIS_TRK" EntityType="Self.vw_payrollregistry_info2_HRIS_TRK" />
           <FunctionImport Name="document_type_tbl_list" ReturnType="Collection(HRIS_TRKModel.document_type_tbl_list_Result)" />
-          <FunctionImport Name="sp_cafao_dtl_tbl_list" ReturnType="Collection(HRIS_TRKModel.sp_cafao_dtl_tbl_list_Result)">
-            <Parameter Name="par_payroll_year" Mode="In" Type="String" />
-            <Parameter Name="par_payroll_registry_nbr" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="sp_document_tracking_nbrs_tbl_update" ReturnType="Collection(HRIS_TRKModel.sp_document_tracking_nbrs_tbl_update_Result)">
             <Parameter Name="p_doc_ctrl_nbr" Mode="In" Type="String" />
             <Parameter Name="p_doc_fund_subcode" Mode="In" Type="String" />
@@ -2940,21 +2940,17 @@ warning 6002: The table/view 'HRIS_TRK.dbo.vw_payrollregistry_info2_HRIS_TRK' do
             <Parameter Name="par_scan_action" Mode="In" Type="String" />
             <Parameter Name="par_doc_type" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="sp_payrollcharges_list" ReturnType="Collection(HRIS_TRKModel.sp_payrollcharges_list_Result)">
+          <Parameter Name="par_appropriation_year" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_cafao_dtl_tbl_list" ReturnType="Collection(HRIS_TRKModel.sp_cafao_dtl_tbl_list_Result)">
+            <Parameter Name="par_payroll_year" Mode="In" Type="String" />
+            <Parameter Name="par_payroll_registry_nbr" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="document_type_tbl_list_Result">
           <Property Type="String" Name="docmnt_type" Nullable="false" MaxLength="2" />
           <Property Type="String" Name="docmnt_type_descr" Nullable="true" MaxLength="50" />
-        </ComplexType>
-        <ComplexType Name="sp_cafao_dtl_tbl_list_Result">
-          <Property Type="String" Name="payroll_year" Nullable="false" MaxLength="4" />
-          <Property Type="String" Name="payroll_registry_nbr" Nullable="false" MaxLength="6" />
-          <Property Type="Int32" Name="seq_nbr" Nullable="false" />
-          <Property Type="String" Name="function_code" Nullable="true" MaxLength="8" />
-          <Property Type="String" Name="function_name" Nullable="true" MaxLength="255" />
-          <Property Type="String" Name="allotment_code" Nullable="true" MaxLength="8" />
-          <Property Type="String" Name="account_code" Nullable="true" MaxLength="15" />
-          <Property Type="String" Name="account_short_title" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="account_amt" Nullable="true" MaxLength="4000" />
         </ComplexType>
         <ComplexType Name="sp_document_tracking_nbrs_tbl_update_Result">
           <Property Type="String" Name="result_value" Nullable="true" MaxLength="1" />
@@ -3901,6 +3897,7 @@ warning 6002: The table/view 'HRIS_TRK.dbo.vw_payrollregistry_info2_HRIS_TRK' do
           <Property Name="updated_dttm" Type="DateTime" Precision="3" />
           <Property Name="raao_code" Type="Int32" />
           <Property Name="ooe_code" Type="Int32" />
+          <Property Name="payrolltemplate_code" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="vw_edocument_trk_tbl_2be_rlsd">
           <Key>
@@ -4126,6 +4123,32 @@ warning 6002: The table/view 'HRIS_TRK.dbo.vw_payrollregistry_info2_HRIS_TRK' do
           <Property Type="String" Name="doc_month" Nullable="false" MaxLength="1" />
           <Property Type="String" Name="doc_remarks" Nullable="false" MaxLength="1" />
           <Property Type="String" Name="doc_status" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="sp_payrollcharges_list_Result">
+          <Property Type="String" Name="function_code" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="function_descr" Nullable="false" MaxLength="150" />
+          <Property Type="String" Name="raao_code" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="raao_descr" Nullable="false" MaxLength="250" />
+          <Property Type="String" Name="ooe_code" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="object_of_expenditure" Nullable="false" MaxLength="250" />
+          <Property Type="String" Name="account_code" Nullable="false" MaxLength="250" />
+          <Property Type="Decimal" Name="appropriation_mt" Nullable="true" Precision="19" />
+          <Property Type="String" Name="appropriation_year" Nullable="true" MaxLength="4" />
+          <Property Type="String" Name="function_shortname" Nullable="true" MaxLength="150" />
+        </ComplexType>
+        <ComplexType Name="sp_cafao_dtl_tbl_list_Result">
+          <Property Type="String" Name="payroll_year" Nullable="false" MaxLength="4" />
+          <Property Type="String" Name="payroll_registry_nbr" Nullable="false" MaxLength="6" />
+          <Property Type="Int32" Name="seq_nbr" Nullable="false" />
+          <Property Type="String" Name="function_code" Nullable="false" MaxLength="8" />
+          <Property Type="String" Name="function_name" Nullable="false" MaxLength="266" />
+          <Property Type="String" Name="allotment_code" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="account_code" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="account_short_title" Nullable="true" />
+          <Property Type="String" Name="account_amt" Nullable="true" MaxLength="4000" />
+          <Property Type="Int32" Name="raao_code" Nullable="true" />
+          <Property Type="Int32" Name="ooe_code" Nullable="true" />
+          <Property Type="String" Name="payrolltemplate_code" Nullable="true" MaxLength="3" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4776,21 +4799,6 @@ warning 6002: The table/view 'HRIS_TRK.dbo.vw_payrollregistry_info2_HRIS_TRK' do
               <ComplexTypeMapping TypeName="HRIS_TRKModel.document_type_tbl_list_Result">
                 <ScalarProperty Name="docmnt_type" ColumnName="docmnt_type" />
                 <ScalarProperty Name="docmnt_type_descr" ColumnName="docmnt_type_descr" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_cafao_dtl_tbl_list" FunctionName="HRIS_TRKModel.Store.sp_cafao_dtl_tbl_list">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="HRIS_TRKModel.sp_cafao_dtl_tbl_list_Result">
-                <ScalarProperty Name="payroll_year" ColumnName="payroll_year" />
-                <ScalarProperty Name="payroll_registry_nbr" ColumnName="payroll_registry_nbr" />
-                <ScalarProperty Name="seq_nbr" ColumnName="seq_nbr" />
-                <ScalarProperty Name="function_code" ColumnName="function_code" />
-                <ScalarProperty Name="function_name" ColumnName="function_name" />
-                <ScalarProperty Name="allotment_code" ColumnName="allotment_code" />
-                <ScalarProperty Name="account_code" ColumnName="account_code" />
-                <ScalarProperty Name="account_short_title" ColumnName="account_short_title" />
-                <ScalarProperty Name="account_amt" ColumnName="account_amt" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -5822,6 +5830,7 @@ warning 6002: The table/view 'HRIS_TRK.dbo.vw_payrollregistry_info2_HRIS_TRK' do
           <EntitySetMapping Name="cafao_dtl_tbl">
             <EntityTypeMapping TypeName="HRIS_TRKModel.cafao_dtl_tbl">
               <MappingFragment StoreEntitySet="cafao_dtl_tbl">
+                <ScalarProperty Name="payrolltemplate_code" ColumnName="payrolltemplate_code" />
                 <ScalarProperty Name="ooe_code" ColumnName="ooe_code" />
                 <ScalarProperty Name="raao_code" ColumnName="raao_code" />
                 <ScalarProperty Name="updated_dttm" ColumnName="updated_dttm" />
@@ -6066,6 +6075,40 @@ warning 6002: The table/view 'HRIS_TRK.dbo.vw_payrollregistry_info2_HRIS_TRK' do
                 <ScalarProperty Name="doc_month" ColumnName="doc_month" />
                 <ScalarProperty Name="doc_remarks" ColumnName="doc_remarks" />
                 <ScalarProperty Name="doc_status" ColumnName="doc_status" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_payrollcharges_list" FunctionName="HRIS_TRKModel.Store.sp_payrollcharges_list">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HRIS_TRKModel.sp_payrollcharges_list_Result">
+                <ScalarProperty Name="function_code" ColumnName="function_code" />
+                <ScalarProperty Name="function_descr" ColumnName="function_descr" />
+                <ScalarProperty Name="raao_code" ColumnName="raao_code" />
+                <ScalarProperty Name="raao_descr" ColumnName="raao_descr" />
+                <ScalarProperty Name="ooe_code" ColumnName="ooe_code" />
+                <ScalarProperty Name="object_of_expenditure" ColumnName="object_of_expenditure" />
+                <ScalarProperty Name="account_code" ColumnName="account_code" />
+                <ScalarProperty Name="appropriation_mt" ColumnName="appropriation_mt" />
+                <ScalarProperty Name="appropriation_year" ColumnName="appropriation_year" />
+                <ScalarProperty Name="function_shortname" ColumnName="function_shortname" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_cafao_dtl_tbl_list" FunctionName="HRIS_TRKModel.Store.sp_cafao_dtl_tbl_list">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HRIS_TRKModel.sp_cafao_dtl_tbl_list_Result">
+                <ScalarProperty Name="payroll_year" ColumnName="payroll_year" />
+                <ScalarProperty Name="payroll_registry_nbr" ColumnName="payroll_registry_nbr" />
+                <ScalarProperty Name="seq_nbr" ColumnName="seq_nbr" />
+                <ScalarProperty Name="function_code" ColumnName="function_code" />
+                <ScalarProperty Name="function_name" ColumnName="function_name" />
+                <ScalarProperty Name="allotment_code" ColumnName="allotment_code" />
+                <ScalarProperty Name="account_code" ColumnName="account_code" />
+                <ScalarProperty Name="account_short_title" ColumnName="account_short_title" />
+                <ScalarProperty Name="account_amt" ColumnName="account_amt" />
+                <ScalarProperty Name="raao_code" ColumnName="raao_code" />
+                <ScalarProperty Name="ooe_code" ColumnName="ooe_code" />
+                <ScalarProperty Name="payrolltemplate_code" ColumnName="payrolltemplate_code" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

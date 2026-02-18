@@ -87,6 +87,11 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
         , { id: '12',   text:   'December' }
     ]
 
+    s.raao_list = [];
+    s.ooe_list = [];
+    s.ddl_raao_code   = ""
+    s.ddl_ooe_code    = ""
+
     function GETMONTH(val)
     {
         var retval = "";
@@ -3878,7 +3883,7 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
                         "title": "FUNCTION",
                         "mData": "function_code",
                         "mRender": function (data, type, full, row) {
-                            return " <span class='text-center btn-block' >" + data + " </span>"
+                            return " <span class='text-center btn-block' >" + data + " " +"<span class='small text-navy'> "+full["account_short_title"]+"</span>"+" </span>"
                         }
                     },
 
@@ -3964,6 +3969,10 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
         s.txtb_account_short_title  = "";
         s.txtb_account_amount       = "";
         s.txtb_seq_no               = "";
+        s.ddl_raao_code             = "";
+        s.ddl_ooe_code              = "";
+        s.raao_list                 = []
+        s.ooe_list                  = []
 
         s.txtb_allotment_code      = s.Cafoa_list[row_id].allotment_code
         s.ddl_function_code        = s.Cafoa_list[row_id].function_code
@@ -3971,6 +3980,37 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
         s.txtb_account_short_title = s.Cafoa_list[row_id].account_short_title
         s.txtb_account_amount      = s.Cafoa_list[row_id].account_amt
         s.txtb_seq_no              = s.Cafoa_list[row_id].seq_nbr
+        
+        h.post("../cMainPage/GetRAAO",
+        {
+             appropriation_year : s.Cafoa_list[row_id].payroll_year
+            , function_code     : s.Cafoa_list[row_id].function_code
+            , account_code      : s.Cafoa_list[row_id].account_code
+        }).then(function (d)
+        {
+            if (d.data.message == "success")
+            {
+                s.raao_list         = d.data.data
+                s.ddl_raao_code     = s.Cafoa_list[row_id].raao_code;
+
+                s.ddl_ooe_code      = "";
+                s.ooe_list          = []
+                h.post("../cMainPage/GetOOE",
+                {
+                    appropriation_year  : s.Cafoa_list[row_id].payroll_year
+                    , function_code     : s.Cafoa_list[row_id].function_code
+                    , account_code      : s.Cafoa_list[row_id].account_code
+                    , raao_code         : s.Cafoa_list[row_id].raao_code
+                }).then(function (d) {
+                    if (d.data.message == "success")
+                    {
+                        s.ooe_list      = d.data.data
+                        s.ddl_ooe_code  = s.Cafoa_list[row_id].ooe_code
+                    }
+                })
+
+            } 
+        })
 
         s.Add_edit_mode_CAFOA = "EDIT";
         s.CAFOA_Hdr_descr     = "Edit Existing Record"
@@ -3979,6 +4019,8 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
     //***********************************************************//
     //***VJA - 2020-10-29 - Edit/Update Data - CAFOA
     //***********************************************************//
+    
+
     s.btn_add_edit_save = function ()
     {
 
@@ -3988,12 +4030,13 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
             payroll_year            : s.payroll_year
             , payroll_registry_nbr  : s.payroll_registry_nbr
             , seq_nbr               : s.txtb_seq_no
-            , function_code: s.ddl_function_code
-            , allotment_code: s.txtb_allotment_code
-            , account_code: s.txtb_account_code
-            , account_short_title: s.txtb_account_short_title
-            , account_amt: $('#txtb_account_amount').val().replace(',', '').replace(',', '').replace(',', '')
-
+            , function_code         : s.ddl_function_code
+            , allotment_code        : s.txtb_allotment_code
+            , account_code          : s.txtb_account_code
+            , account_short_title   : s.txtb_account_short_title
+            , account_amt           : $('#txtb_account_amount').val().replace(',', '').replace(',', '').replace(',', '')
+            , raao_code             : s.ddl_raao_code
+            , ooe_code              : s.ddl_ooe_code
         };
         console.log(data)
         if (s.validation_cafoa())
@@ -4014,7 +4057,9 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
                         data.account_short_title	= s.txtb_account_short_title       
                         data.account_amt			= s.txtb_account_amount
                         data.function_name          = $('#ddl_function_code option:selected').text()
-                    
+                        data.raao_code              = s.ddl_raao_code
+                        data.ooe_code               = s.ddl_ooe_code
+
                         s.Cafoa_list.push(data)
                         s.Cafoa_table.fnClearTable();
                         s.Cafoa_table.fnAddData(s.Cafoa_list);
@@ -4041,7 +4086,7 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
             {
                 $('#i_save_cafoa').removeClass('fa-save');
                 $('#i_save_cafoa').addClass('fa-spinner fa-spin');
-
+                
                 h.post("../cMainPage/UpdateFromDatabase", { data: data }).then(function (d) {
                     if (d.data.message == "success") {
 
@@ -4056,6 +4101,8 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
                         s.Cafoa_list[index_of_row].account_short_title	    = s.txtb_account_short_title       
                         s.Cafoa_list[index_of_row].account_amt			    = s.txtb_account_amount
                         s.Cafoa_list[index_of_row].function_name            = $('#ddl_function_code option:selected').text()
+                        s.Cafoa_list[index_of_row].raao_code                = s.ddl_raao_code
+                        s.Cafoa_list[index_of_row].ooe_code                 = s.ddl_ooe_code
                     
                         s.Cafoa_table.fnClearTable();
                         s.Cafoa_table.fnAddData(s.Cafoa_list);
@@ -4177,6 +4224,8 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
         cs.notrequired3("txtb_account_code")
         cs.notrequired3("txtb_account_amount")
         cs.notrequired3("txtb_account_short_title")
+        cs.notrequired3("ddl_raao_code")
+        cs.notrequired3("ddl_ooe_code")
         var return_val = true;
 
         if (s.ddl_function_code == "") {
@@ -4201,6 +4250,14 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
         }
         if (s.txtb_account_short_title == "") {
             cs.required3("txtb_account_short_title", "Required Field")
+            return_val = false;
+        } 
+        if (s.ddl_raao_code == "") {
+            cs.required3("ddl_raao_code", "Required Field")
+            return_val = false;
+        } 
+        if (s.ddl_ooe_code == "") {
+            cs.required3("ddl_ooe_code", "Required Field")
             return_val = false;
         } 
         return return_val;
@@ -4694,4 +4751,126 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
 
         $("div.toolbar").html('<b>Custom tool bar! Text/images etc.</b>');
     }
+    s.GetRAAO = function (appropriation_year, function_code, account_code)
+    {
+        h.post("../cMainPage/GetRAAO",
+        {
+            appropriation_year  : appropriation_year
+            ,function_code      : function_code
+            ,account_code       : account_code
+            }).then(function (d)
+            {
+            if (d.data.message == "success")
+            {
+                s.raao_list = d.data.data
+            }
+        })
+    }
+    s.GetOOE = function (appropriation_year, function_code, account_code, raao_code)
+    {
+        s.ddl_ooe_code = "";
+        s.ooe_list = []
+        h.post("../cMainPage/GetOOE",
+        {
+            appropriation_year  : appropriation_year
+            ,function_code      : function_code
+            ,account_code       : account_code
+            , raao_code         : raao_code
+            }).then(function (d)
+            {
+            if (d.data.message == "success")
+            {
+                s.ooe_list = d.data.data
+            }
+        })
+    }
+
+    //***********************************************************//
+    //*** Select2 Initialization for RAAO and OOE dropdowns
+    //***********************************************************//
+    var select2Initialized = false;
+
+    $('#cafoa_modal_add_edit').on('shown.bs.modal', function () {
+        if (!select2Initialized) {
+            $('#ddl_raao_code').select2({
+                dropdownParent: $('#cafoa_modal_add_edit'),
+                placeholder: '-- Select Here --',
+                allowClear: true,
+                width: '100%'
+            });
+
+            $('#ddl_ooe_code').select2({
+                dropdownParent: $('#cafoa_modal_add_edit'),
+                placeholder: '-- Select Here --',
+                allowClear: true,
+                width: '100%'
+            });
+
+            $('#ddl_raao_code').on('change', function () {
+                var val = $(this).val();
+                s.$apply(function () {
+                    s.ddl_raao_code = val;
+                    if (val) {
+                        s.txtb_account_short_title = $('#ddl_raao_code option:selected').text()
+                        s.GetOOE(s.payroll_year, s.ddl_function_code, s.txtb_account_code, val);
+                    }
+                });
+            });
+
+            $('#ddl_ooe_code').on('change', function () {
+                var val = $(this).val();
+                s.$apply(function () {
+                    s.ddl_ooe_code = val;
+                });
+            });
+
+            select2Initialized = true;
+        }
+
+        // Refresh Select2 to reflect current data
+        setTimeout(function () {
+            $('#ddl_raao_code').val(s.ddl_raao_code).trigger('change.select2');
+            $('#ddl_ooe_code').val(s.ddl_ooe_code).trigger('change.select2');
+        }, 100);
+    });
+
+    $('#cafoa_modal_add_edit').on('hidden.bs.modal', function () {
+        // Reset Select2 selections when modal is closed
+        $('#ddl_raao_code').val('').trigger('change.select2');
+        $('#ddl_ooe_code').val('').trigger('change.select2');
+    });
+
+    // Watch raao_list changes and rebuild Select2 options
+    s.$watch('raao_list', function (newVal) {
+        if (select2Initialized) {
+            setTimeout(function () {
+                $('#ddl_raao_code').val(s.ddl_raao_code).trigger('change.select2');
+            }, 100);
+        }
+    });
+
+    // Watch ooe_list changes and rebuild Select2 options
+    s.$watch('ooe_list', function (newVal) {
+        if (select2Initialized) {
+            setTimeout(function () {
+                $('#ddl_ooe_code').val(s.ddl_ooe_code).trigger('change.select2');
+            }, 100);
+        }
+    });
+
+    // Watch model value changes and sync to Select2
+    s.$watch('ddl_raao_code', function (newVal) {
+        if (select2Initialized) {
+            $('#ddl_raao_code').val(newVal).trigger('change.select2');
+        }
+    });
+
+    s.$watch('ddl_ooe_code', function (newVal) {
+        if (select2Initialized) {
+            $('#ddl_ooe_code').val(newVal).trigger('change.select2');
+        }
+    });
+
+    $.fn.modal.Constructor.prototype.enforceFocus = function () { }
+
 })

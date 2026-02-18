@@ -28,5 +28,6 @@ namespace HRIS_ePayTrack.Models
         public Nullable<System.DateTime> updated_dttm { get; set; }
         public Nullable<int> raao_code { get; set; }
         public Nullable<int> ooe_code { get; set; }
+        public string payrolltemplate_code { get; set; }
     }
 }

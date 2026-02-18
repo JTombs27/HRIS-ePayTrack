@@ -11,19 +11,17 @@ namespace HRIS_ePayTrack.Models
 {
     using System;
     
-    public partial class sp_cafao_dtl_tbl_list_Result
+    public partial class sp_payrollcharges_list_Result
     {
-        public string payroll_year { get; set; }
-        public string payroll_registry_nbr { get; set; }
-        public int seq_nbr { get; set; }
         public string function_code { get; set; }
-        public string function_name { get; set; }
-        public string allotment_code { get; set; }
+        public string function_descr { get; set; }
+        public string raao_code { get; set; }
+        public string raao_descr { get; set; }
+        public string ooe_code { get; set; }
+        public string object_of_expenditure { get; set; }
         public string account_code { get; set; }
-        public string account_short_title { get; set; }
-        public string account_amt { get; set; }
-        public Nullable<int> raao_code { get; set; }
-        public Nullable<int> ooe_code { get; set; }
-        public string payrolltemplate_code { get; set; }
+        public Nullable<decimal> appropriation_mt { get; set; }
+        public string appropriation_year { get; set; }
+        public string function_shortname { get; set; }
     }
 }

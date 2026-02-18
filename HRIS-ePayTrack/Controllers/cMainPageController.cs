@@ -1257,6 +1257,8 @@ namespace HRIS_ePayTrack.Controllers
                 data.updated_by_user      = "";
                 data.created_dttm         = DateTime.Now;
                 data.updated_dttm         = default_date;
+                data.raao_code            = data.raao_code ;
+                data.ooe_code             = data.ooe_code;
 
                 message = "success";
                 message_oth = Cmn.CONST_NEWREC;
@@ -1294,6 +1296,8 @@ namespace HRIS_ePayTrack.Controllers
                 upd.account_amt          = data.account_amt         ;
                 upd.updated_by_user      = Session["user_id"].ToString();
                 upd.updated_dttm         = DateTime.Now;
+                upd.raao_code            = data.raao_code;
+                upd.ooe_code             = data.ooe_code;
 
                 message = "success";
                 message_oth = Cmn.CONST_EDITREC;
@@ -1401,6 +1405,40 @@ namespace HRIS_ePayTrack.Controllers
                     ,dept
                 }, JsonRequestBehavior.AllowGet);
            
+        }
+        public ActionResult GetRAAO(string appropriation_year, string function_code, string account_code) 
+        {
+            try
+            {
+                var data = db.sp_payrollcharges_list(appropriation_year)
+                            .Where(a=>a.function_code == function_code)
+                            .GroupBy(a => new { a.raao_code, a.raao_descr })
+                            .Select(g => new 
+                            {
+                                raao_code  = g.Key.raao_code,
+                                raao_descr = g.Key.raao_descr
+                            })
+                            .ToList();
+                return JSON(new { data , message = "success" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return JSON(new { message = e.Message, icon = "error" }, JsonRequestBehavior.AllowGet);
+            }
+        
+        }
+        public ActionResult GetOOE(string appropriation_year, string function_code, string account_code, string raao_code) 
+        {
+            try
+            {
+                var data = db.sp_payrollcharges_list(appropriation_year).Where(a=>a.function_code == function_code && a.raao_code == raao_code).ToList();
+                return JSON(new { data , message = "success" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return JSON(new { message = e.Message, icon = "error" }, JsonRequestBehavior.AllowGet);
+            }
+        
         }
 
     }
