@@ -3985,7 +3985,6 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
         {
              appropriation_year : s.Cafoa_list[row_id].payroll_year
             , function_code     : s.Cafoa_list[row_id].function_code
-            , account_code      : s.Cafoa_list[row_id].account_code
         }).then(function (d)
         {
             if (d.data.message == "success")
@@ -3997,10 +3996,7 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
                 s.ooe_list          = []
                 h.post("../cMainPage/GetOOE",
                 {
-                    appropriation_year  : s.Cafoa_list[row_id].payroll_year
-                    , function_code     : s.Cafoa_list[row_id].function_code
-                    , account_code      : s.Cafoa_list[row_id].account_code
-                    , raao_code         : s.Cafoa_list[row_id].raao_code
+                    account_code      : s.Cafoa_list[row_id].account_code
                 }).then(function (d) {
                     if (d.data.message == "success")
                     {
@@ -4037,6 +4033,7 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
             , account_amt           : $('#txtb_account_amount').val().replace(',', '').replace(',', '').replace(',', '')
             , raao_code             : s.ddl_raao_code
             , ooe_code              : s.ddl_ooe_code
+            , payrolltemplate_code  : s.data_vl.payrolltemplate_code
         };
         console.log(data)
         if (s.validation_cafoa())
@@ -4751,13 +4748,12 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
 
         $("div.toolbar").html('<b>Custom tool bar! Text/images etc.</b>');
     }
-    s.GetRAAO = function (appropriation_year, function_code, account_code)
+    s.GetRAAO = function (appropriation_year, function_code)
     {
         h.post("../cMainPage/GetRAAO",
         {
             appropriation_year  : appropriation_year
             ,function_code      : function_code
-            ,account_code       : account_code
             }).then(function (d)
             {
             if (d.data.message == "success")
@@ -4766,16 +4762,13 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
             }
         })
     }
-    s.GetOOE = function (appropriation_year, function_code, account_code, raao_code)
+    s.GetOOE = function (account_code)
     {
         s.ddl_ooe_code = "";
         s.ooe_list = []
         h.post("../cMainPage/GetOOE",
         {
-            appropriation_year  : appropriation_year
-            ,function_code      : function_code
-            ,account_code       : account_code
-            , raao_code         : raao_code
+            account_code       : account_code
             }).then(function (d)
             {
             if (d.data.message == "success")

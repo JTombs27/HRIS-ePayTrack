@@ -1068,7 +1068,7 @@
                     <div class="row">
                         <div class="col-lg-12" style="margin-bottom:3px">
                             <span class="font-bold ">Function Code: </span>
-                            <select class="form-control font-bold" id="ddl_function_code" ng-model="ddl_function_code" ng-change="GetRAAO(payroll_year,ddl_function_code,txtb_account_code)">
+                            <select class="form-control font-bold" id="ddl_function_code" ng-model="ddl_function_code" ng-change="GetRAAO(payroll_year,ddl_function_code)">
                                 <option value="">-- Select Here --</option>
                                 <option ng-repeat="lst in func_list" value="{{lst.function_code}}">{{lst.function_name}}</option>
                             </select>
@@ -1080,15 +1080,16 @@
 
                         <div class="col-lg-4" style="margin-bottom:3px">
                             <span class="font-bold ">Account Code: </span>
-                            <input type="text" class="form-control font-bold text-center" id="txtb_account_code" ng-model="txtb_account_code" maxlength="15" ng-keyup="GetRAAO(payroll_year,ddl_function_code,txtb_account_code)">
+                            <input type="text" class="form-control font-bold text-center" id="txtb_account_code" ng-model="txtb_account_code" maxlength="15" ng-keyup="GetRAAO(payroll_year,ddl_function_code)">
                         </div>
                         <div class="col-lg-4" style="margin-bottom:3px">
                             <span class="font-bold ">Amount: </span>
                             <input type="text" class="form-control font-bold text-right" id="txtb_account_amount" ng-model="txtb_account_amount">
                         </div>
                         <div class="col-lg-12" style="margin-bottom:3px">
-                            <span class="font-bold ">RAAO: </span>
-                            <select class="form-control font-bold" id="ddl_raao_code" ng-model="ddl_raao_code" ng-change="GetOOE(payroll_year,ddl_function_code,txtb_account_code,ddl_raao_code)">
+                            <hr />
+                            <span class="font-bold ">RAAO: <a class="small pull-right" ng-click="GetRAAO(payroll_year,ddl_function_code)"><i class="fa fa-info-circle"></i> &nbsp;{{ddl_function_code}}</a></span>
+                            <select class="form-control font-bold" id="ddl_raao_code" ng-model="ddl_raao_code" >
                                 <option value="">-- Select Here --</option>
                                 <option ng-repeat="lst in raao_list" value="{{lst.raao_code}}">{{lst.raao_descr}}</option>
                             </select>
@@ -1098,7 +1099,7 @@
                             <textarea type="text" class="form-control font-bold" id="txtb_account_short_title" rows="5" ng-model="txtb_account_short_title" disabled></textarea>
                         </div>
                         <div class="col-lg-12" style="margin-bottom:3px">
-                            <span class="font-bold ">OOE: </span>
+                            <span class="font-bold ">OOE: <a class="small pull-right" ng-click="GetOOE(txtb_account_code)"><i class="fa fa-info-circle"></i> &nbsp;{{txtb_account_code}}</a></span>
                             <select class="form-control font-bold" id="ddl_ooe_code" ng-model="ddl_ooe_code">
                                 <option value="">-- Select Here --</option>
                                 <option ng-repeat="lst in ooe_list" value="{{lst.ooe_code}}">{{lst.ooe_code}} - {{lst.object_of_expenditure}}</option>

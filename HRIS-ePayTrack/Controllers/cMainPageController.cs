@@ -1,19 +1,32 @@
-﻿using HRIS_Common;
-using HRIS_ePayTrack.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity.Validation;
 using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using HRIS_Common;
+using HRIS_ePayTrack.Models;
+using MySqlConnector;
 
 namespace HRIS_ePayTrack.Controllers
 {
-   
-        //test
+
+    public class raaohs
+    {
+        public int raao_code            { get; set; }
+        public string raao_descr        { get; set; }
+    }
+    public class ooes
+    {
+        
+        public int ooe_code { get; set; }
+        public string object_of_expenditure { get; set; }
+    }
     public class cMainPageController : Controller
     {
+        public string connectionString = ConfigurationManager.ConnectionStrings["MySqlConn"].ConnectionString;
         HRIS_TRKEntities db     = new HRIS_TRKEntities();
         CommonDB Cmn            = new CommonDB();
         string role_id          = "";
@@ -1410,16 +1423,36 @@ namespace HRIS_ePayTrack.Controllers
         {
             try
             {
-                var data = db.sp_payrollcharges_list(appropriation_year)
-                            .Where(a=>a.function_code == function_code)
-                            .GroupBy(a => new { a.raao_code, a.raao_descr })
-                            .Select(g => new 
+                //var data = db.sp_payrollcharges_list(appropriation_year)
+                //            .Where(a => a.function_code == function_code)
+                //            .GroupBy(a => new { a.raao_code, a.raao_descr })
+                //            .Select(g => new
+                //            {
+                //                g.Key.raao_code,
+                //                g.Key.raao_descr
+                //            })
+                //            .ToList();
+                //return JSON(new { data, message = "success" }, JsonRequestBehavior.AllowGet);
+                
+                List<raaohs> data = new List<raaohs>();
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string query = "SELECT tyear,recid,FRAODESC FROM raaohs WHERE tyear = '"+ appropriation_year + "' AND FFUNCCOD = '"+ function_code + "' ORDER BY FRAODESC";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            data.Add(new raaohs
                             {
-                                raao_code  = g.Key.raao_code,
-                                raao_descr = g.Key.raao_descr
-                            })
-                            .ToList();
-                return JSON(new { data , message = "success" }, JsonRequestBehavior.AllowGet);
+                                 raao_code  = reader.GetInt32("recid")
+                                ,raao_descr = reader.GetString("FRAODESC")
+                            });
+                        }
+                    }
+                }
+                return JSON(new { data, message = "success" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
@@ -1427,12 +1460,32 @@ namespace HRIS_ePayTrack.Controllers
             }
         
         }
-        public ActionResult GetOOE(string appropriation_year, string function_code, string account_code, string raao_code) 
+        public ActionResult GetOOE(string account_code) 
         {
             try
             {
-                var data = db.sp_payrollcharges_list(appropriation_year).Where(a=>a.function_code == function_code && a.raao_code == raao_code).ToList();
-                return JSON(new { data , message = "success" }, JsonRequestBehavior.AllowGet);
+                //var data = db.sp_payrollcharges_list(appropriation_year).Where(a=>a.function_code == function_code && a.raao_code == raao_code).ToList();
+                //return JSON(new { data , message = "success" }, JsonRequestBehavior.AllowGet);
+
+                List<ooes> data = new List<ooes>();
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string query = "SELECT recid,FOOEDESC,FACTCODE FROM ooes WHERE FACTCODE = '"+ account_code + "'";
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            data.Add(new ooes
+                            {
+                                 ooe_code               = reader.GetInt32("recid")
+                                ,object_of_expenditure  = reader.GetString("FOOEDESC")
+                            });
+                        }
+                    }
+                }
+                return JSON(new { data, message = "success" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
