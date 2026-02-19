@@ -57,6 +57,13 @@
     .select2-dropdown {
         z-index: 99999 !important;
     }
+
+    .select2-container .select2-selection--single,
+    .select2-container .select2-selection__rendered,
+    .select2-results__option {
+        text-align: left !important;
+    }
+
 </style>
 <div class="wrapper wrapper-content animated fadeInRight with-background" ng-app="ng_ePayTrack_App" ng-controller="cMainpageCtrlr" style="padding:10px;">
 
@@ -1089,7 +1096,7 @@
                         <div class="col-lg-12" style="margin-bottom:3px">
                             <hr />
                             <span class="font-bold ">RAAO: <a class="small pull-right" ng-click="GetRAAO(payroll_year,ddl_function_code)"><i class="fa fa-info-circle"></i> &nbsp;{{ddl_function_code}}</a></span>
-                            <select class="form-control font-bold" id="ddl_raao_code" ng-model="ddl_raao_code" >
+                            <select class="form-control font-bold text-left" id="ddl_raao_code" ng-model="ddl_raao_code" >
                                 <option value="">-- Select Here --</option>
                                 <option ng-repeat="lst in raao_list" value="{{lst.raao_code}}">{{lst.raao_descr}}</option>
                             </select>
