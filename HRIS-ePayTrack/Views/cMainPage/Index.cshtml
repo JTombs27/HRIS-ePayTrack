@@ -1087,7 +1087,7 @@
 
                         <div class="col-lg-4" style="margin-bottom:3px">
                             <span class="font-bold ">Account Code: </span>
-                            <input type="text" class="form-control font-bold text-center" id="txtb_account_code" ng-model="txtb_account_code" maxlength="15" ng-keyup="GetRAAO(payroll_year,ddl_function_code)">
+                            <input type="text" class="form-control font-bold text-center" id="txtb_account_code" ng-model="txtb_account_code" maxlength="15" ng-keyup="GetOOE(txtb_account_code)">
                         </div>
                         <div class="col-lg-4" style="margin-bottom:3px">
                             <span class="font-bold ">Amount: </span>
@@ -1102,15 +1102,15 @@
                             </select>
                         </div>
                         <div class="col-lg-12" style="margin-bottom:3px">
-                            <span class="font-bold ">Account Short Title: </span>
-                            <textarea type="text" class="form-control font-bold" id="txtb_account_short_title" rows="5" ng-model="txtb_account_short_title" disabled></textarea>
-                        </div>
-                        <div class="col-lg-12" style="margin-bottom:3px">
                             <span class="font-bold ">OOE: <a class="small pull-right" ng-click="GetOOE(txtb_account_code)"><i class="fa fa-info-circle"></i> &nbsp;{{txtb_account_code}}</a></span>
                             <select class="form-control font-bold" id="ddl_ooe_code" ng-model="ddl_ooe_code">
                                 <option value="">-- Select Here --</option>
-                                <option ng-repeat="lst in ooe_list" value="{{lst.ooe_code}}">{{lst.ooe_code}} - {{lst.object_of_expenditure}}</option>
+                                <option ng-repeat="lst in ooe_list" value="{{lst.ooe_code}}">{{lst.object_of_expenditure}}</option>
                             </select>
+                        </div>
+                        <div class="col-lg-12" style="margin-bottom:3px">
+                            <span class="font-bold ">Account Short Title: </span>
+                            <textarea type="text" class="form-control font-bold" id="txtb_account_short_title" rows="5" ng-model="txtb_account_short_title" disabled></textarea>
                         </div>
                     </div>
                 </div>

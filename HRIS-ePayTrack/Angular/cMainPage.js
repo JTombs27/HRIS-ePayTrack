@@ -4804,8 +4804,9 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
                 s.$apply(function () {
                     s.ddl_raao_code = val;
                     if (val) {
-                        s.txtb_account_short_title = $('#ddl_raao_code option:selected').text()
-                        s.GetOOE(s.payroll_year, s.ddl_function_code, s.txtb_account_code, val);
+                        var ooe_descr = s.ddl_ooe_code != null && s.ddl_ooe_code !== '' ? ' (' + $('#ddl_ooe_code option:selected').text().trim() + ')' : '';
+                        s.txtb_account_short_title = $('#ddl_raao_code option:selected').text().trim() + ooe_descr
+                        s.GetOOE(s.txtb_account_code);
                     }
                 });
             });
@@ -4814,6 +4815,8 @@ ng_ePayTrack_App.controller("cMainpageCtrlr", function (commonScript, $scope, $h
                 var val = $(this).val();
                 s.$apply(function () {
                     s.ddl_ooe_code = val;
+                    var ooe_descr = s.ddl_ooe_code != null && s.ddl_ooe_code !== '' ? ' (' + $('#ddl_ooe_code option:selected').text().trim() + ')' : '';
+                    s.txtb_account_short_title = $('#ddl_raao_code option:selected').text().trim() + ooe_descr
                 });
             });
 
